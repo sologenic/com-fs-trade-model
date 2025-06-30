@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package trade;
+
+option go_package = "github.com/sologenic/com-fs-trade-model;trade";
+
+import "google/protobuf/timestamp.proto";
+import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
+import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
+
+// Key in store is TXID-Sequence-Metadata.Network
+message Trade {
+    string UserID = 1;
+    string OrderID = 2; // Order key: OrderID-SmartContractAddr-Network
+    int64 Sequence = 3; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
+    decimal.Decimal Amount = 4;
+    double Price = 5;
+    denom.Denom Denom1 = 6; // Base currency (e.g. suwusdc_1-smartContractAddr)
+    denom.Denom Denom2 = 7; // Asset denom (e.g. suaapl_1-smartContractAddr)
+    orderproperties.Side Side = 8;  // The buy/sell (e.g. did the user place a buy or sell order)
+    google.protobuf.Timestamp BlockTime = 9; // The time the trade was executed in UTC
+
+    // Standard storage related fields
+    metadata.MetaData MetaData = 30;
+    optional string TXID = 31;
+    int64 BlockHeight = 32;
+    bool Enriched = 33; // If the trade has been enriched with precision data
+    bool Processed = 34; // Check if trade is processed into the OHLC
+
+    // USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
+    optional float USD = 40; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+
+    // Trades get stored in alphabetical order of the denom pair. 
+    // Data is "uninverted" on retrieval and 
+    // this flag only indicates that the denoms as seen in the record are not in the original order
+    bool Inverted = 50; 
+}
+
+message Trades {
+    repeated Trade Trades = 1;
+}
+
+message TradePair {
+    denom.Denom Denom1 = 1;
+    denom.Denom Denom2 = 2;
+    metadata.MetaData MetaData = 3;
+    optional decimal.Decimal PriceTick = 4; 
+    optional int64 QuantityStep = 5; 
+}
+
+message TradePairs {
+    repeated TradePair TradePairs = 1;
+    optional int32 Offset = 2;
+}
