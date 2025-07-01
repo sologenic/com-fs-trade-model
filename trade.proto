@@ -12,7 +12,7 @@ import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 
 // Key in store is TXID-Sequence-Metadata.Network
 message Trade {
-    string UserID = 1;
+    string Wallet = 1; // Wallet Address of user who placed the order
     string OrderID = 2; // Order key: OrderID-SmartContractAddr-Network
     int64 Sequence = 3; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
     decimal.Decimal Amount = 4;

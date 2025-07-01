@@ -6,7 +6,8 @@ import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order
 export declare const protobufPackage = "trade";
 /** Key in store is TXID-Sequence-Metadata.Network */
 export interface Trade {
-    UserID: string;
+    /** Wallet Address of user who placed the order */
+    Wallet: string;
     /** Order key: OrderID-SmartContractAddr-Network */
     OrderID: string;
     /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
@@ -58,7 +59,7 @@ export declare const Trade: {
     fromJSON(object: any): Trade;
     toJSON(message: Trade): unknown;
     create<I extends {
-        UserID?: string | undefined;
+        Wallet?: string | undefined;
         OrderID?: string | undefined;
         Sequence?: number | undefined;
         Amount?: {
@@ -101,7 +102,7 @@ export declare const Trade: {
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & {
-        UserID?: string | undefined;
+        Wallet?: string | undefined;
         OrderID?: string | undefined;
         Sequence?: number | undefined;
         Amount?: ({
@@ -177,7 +178,7 @@ export declare const Trade: {
         Inverted?: boolean | undefined;
     } & { [K_6 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
     fromPartial<I_1 extends {
-        UserID?: string | undefined;
+        Wallet?: string | undefined;
         OrderID?: string | undefined;
         Sequence?: number | undefined;
         Amount?: {
@@ -220,7 +221,7 @@ export declare const Trade: {
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & {
-        UserID?: string | undefined;
+        Wallet?: string | undefined;
         OrderID?: string | undefined;
         Sequence?: number | undefined;
         Amount?: ({
@@ -303,7 +304,7 @@ export declare const Trades: {
     toJSON(message: Trades): unknown;
     create<I extends {
         Trades?: {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -348,7 +349,7 @@ export declare const Trades: {
         }[] | undefined;
     } & {
         Trades?: ({
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -391,7 +392,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -434,7 +435,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: ({
@@ -509,7 +510,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -555,7 +556,7 @@ export declare const Trades: {
     } & { [K_8 in Exclude<keyof I, "Trades">]: never; }>(base?: I | undefined): Trades;
     fromPartial<I_1 extends {
         Trades?: {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -600,7 +601,7 @@ export declare const Trades: {
         }[] | undefined;
     } & {
         Trades?: ({
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -643,7 +644,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
@@ -686,7 +687,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: ({
@@ -761,7 +762,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
-            UserID?: string | undefined;
+            Wallet?: string | undefined;
             OrderID?: string | undefined;
             Sequence?: number | undefined;
             Amount?: {
