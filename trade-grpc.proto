@@ -24,10 +24,9 @@ service TradeService {
 }
 
 message ID {
-    int64 Sequence = 1;
-    string TXID = 2;
-    string OrganizaionID = 3; // Organization ID for the trade
-    metadata.Network Network = 4;
+    string TXID = 1;
+    string OrganizaionID = 2; // Organization ID for the trade
+    metadata.Network Network = 3;
 }
 
 // Ability to get all trade history views using the filter options
