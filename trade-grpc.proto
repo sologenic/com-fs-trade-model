@@ -41,7 +41,7 @@ message Filter {
     optional string TXID = 7;
     optional denom.Denom Denom1 = 8;
     optional denom.Denom Denom2 = 9;
-    optional int64 Offset = 10;
+    optional int32 Offset = 10;
     optional orderproperties.Side Side = 11;
     string OrganizationID = 12;
 }
