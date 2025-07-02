@@ -23,7 +23,7 @@ const (
 	TradeService_Get_FullMethodName             = "/trade.TradeService/Get"
 	TradeService_Upsert_FullMethodName          = "/trade.TradeService/Upsert"
 	TradeService_BatchUpsert_FullMethodName     = "/trade.TradeService/BatchUpsert"
-	TradeService_GetAll_FullMethodName          = "/trade.TradeService/GetAll"
+	TradeService_List_FullMethodName            = "/trade.TradeService/List"
 	TradeService_GetTradePairs_FullMethodName   = "/trade.TradeService/GetTradePairs"
 	TradeService_UpsertTradePair_FullMethodName = "/trade.TradeService/UpsertTradePair"
 )
@@ -32,11 +32,12 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TradeServiceClient interface {
-	// Get a single trade
+	// Trade
 	Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Trade, error)
 	Upsert(ctx context.Context, in *Trade, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	BatchUpsert(ctx context.Context, in *Trades, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	GetAll(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Trades, error)
+	List(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Trades, error)
+	// TradePair
 	GetTradePairs(ctx context.Context, in *TradePairFilter, opts ...grpc.CallOption) (*TradePairs, error)
 	UpsertTradePair(ctx context.Context, in *TradePair, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -76,9 +77,9 @@ func (c *tradeServiceClient) BatchUpsert(ctx context.Context, in *Trades, opts .
 	return out, nil
 }
 
-func (c *tradeServiceClient) GetAll(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Trades, error) {
+func (c *tradeServiceClient) List(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Trades, error) {
 	out := new(Trades)
-	err := c.cc.Invoke(ctx, TradeService_GetAll_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, TradeService_List_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,11 +108,12 @@ func (c *tradeServiceClient) UpsertTradePair(ctx context.Context, in *TradePair,
 // All implementations should embed UnimplementedTradeServiceServer
 // for forward compatibility
 type TradeServiceServer interface {
-	// Get a single trade
+	// Trade
 	Get(context.Context, *ID) (*Trade, error)
 	Upsert(context.Context, *Trade) (*emptypb.Empty, error)
 	BatchUpsert(context.Context, *Trades) (*emptypb.Empty, error)
-	GetAll(context.Context, *Filter) (*Trades, error)
+	List(context.Context, *Filter) (*Trades, error)
+	// TradePair
 	GetTradePairs(context.Context, *TradePairFilter) (*TradePairs, error)
 	UpsertTradePair(context.Context, *TradePair) (*emptypb.Empty, error)
 }
@@ -129,8 +131,8 @@ func (UnimplementedTradeServiceServer) Upsert(context.Context, *Trade) (*emptypb
 func (UnimplementedTradeServiceServer) BatchUpsert(context.Context, *Trades) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BatchUpsert not implemented")
 }
-func (UnimplementedTradeServiceServer) GetAll(context.Context, *Filter) (*Trades, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAll not implemented")
+func (UnimplementedTradeServiceServer) List(context.Context, *Filter) (*Trades, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedTradeServiceServer) GetTradePairs(context.Context, *TradePairFilter) (*TradePairs, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTradePairs not implemented")
@@ -204,20 +206,20 @@ func _TradeService_BatchUpsert_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TradeService_GetAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TradeService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Filter)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TradeServiceServer).GetAll(ctx, in)
+		return srv.(TradeServiceServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TradeService_GetAll_FullMethodName,
+		FullMethod: TradeService_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServiceServer).GetAll(ctx, req.(*Filter))
+		return srv.(TradeServiceServer).List(ctx, req.(*Filter))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -278,8 +280,8 @@ var TradeService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TradeService_BatchUpsert_Handler,
 		},
 		{
-			MethodName: "GetAll",
-			Handler:    _TradeService_GetAll_Handler,
+			MethodName: "List",
+			Handler:    _TradeService_List_Handler,
 		},
 		{
 			MethodName: "GetTradePairs",

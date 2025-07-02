@@ -38,9 +38,8 @@ export interface Trade {
   /** The buy/sell (e.g. did the user place a buy or sell order) */
   Side: Side;
   /** The time the trade was executed in UTC */
-  BlockTime:
-    | Date
-    | undefined;
+  BlockTime: Date | undefined;
+  OrganizationID: string;
   /** Standard storage related fields */
   MetaData: MetaData | undefined;
   TXID?: string | undefined;
@@ -71,6 +70,7 @@ export interface TradePair {
   MetaData: MetaData | undefined;
   PriceTick?: Decimal | undefined;
   QuantityStep?: number | undefined;
+  OrganizationID: string;
 }
 
 export interface TradePairs {
@@ -90,6 +90,7 @@ function createBaseTrade(): Trade {
     Denom2: undefined,
     Side: 0,
     BlockTime: undefined,
+    OrganizationID: "",
     MetaData: undefined,
     TXID: undefined,
     BlockHeight: 0,
@@ -131,6 +132,9 @@ export const Trade = {
     }
     if (message.BlockTime !== undefined) {
       Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(82).fork()).ldelim();
+    }
+    if (message.OrganizationID !== "") {
+      writer.uint32(90).string(message.OrganizationID);
     }
     if (message.MetaData !== undefined) {
       MetaData.encode(message.MetaData, writer.uint32(242).fork()).ldelim();
@@ -233,6 +237,13 @@ export const Trade = {
 
           message.BlockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
+        case 11:
+          if (tag !== 90) {
+            break;
+          }
+
+          message.OrganizationID = reader.string();
+          continue;
         case 30:
           if (tag !== 242) {
             break;
@@ -303,6 +314,7 @@ export const Trade = {
       Denom2: isSet(object.Denom2) ? Denom.fromJSON(object.Denom2) : undefined,
       Side: isSet(object.Side) ? sideFromJSON(object.Side) : 0,
       BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
+      OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
       MetaData: isSet(object.MetaData) ? MetaData.fromJSON(object.MetaData) : undefined,
       TXID: isSet(object.TXID) ? globalThis.String(object.TXID) : undefined,
       BlockHeight: isSet(object.BlockHeight) ? globalThis.Number(object.BlockHeight) : 0,
@@ -344,6 +356,9 @@ export const Trade = {
     }
     if (message.BlockTime !== undefined) {
       obj.BlockTime = message.BlockTime.toISOString();
+    }
+    if (message.OrganizationID !== "") {
+      obj.OrganizationID = message.OrganizationID;
     }
     if (message.MetaData !== undefined) {
       obj.MetaData = MetaData.toJSON(message.MetaData);
@@ -390,6 +405,7 @@ export const Trade = {
       : undefined;
     message.Side = object.Side ?? 0;
     message.BlockTime = object.BlockTime ?? undefined;
+    message.OrganizationID = object.OrganizationID ?? "";
     message.MetaData = (object.MetaData !== undefined && object.MetaData !== null)
       ? MetaData.fromPartial(object.MetaData)
       : undefined;
@@ -461,7 +477,14 @@ export const Trades = {
 };
 
 function createBaseTradePair(): TradePair {
-  return { Denom1: undefined, Denom2: undefined, MetaData: undefined, PriceTick: undefined, QuantityStep: undefined };
+  return {
+    Denom1: undefined,
+    Denom2: undefined,
+    MetaData: undefined,
+    PriceTick: undefined,
+    QuantityStep: undefined,
+    OrganizationID: "",
+  };
 }
 
 export const TradePair = {
@@ -480,6 +503,9 @@ export const TradePair = {
     }
     if (message.QuantityStep !== undefined) {
       writer.uint32(40).int64(message.QuantityStep);
+    }
+    if (message.OrganizationID !== "") {
+      writer.uint32(50).string(message.OrganizationID);
     }
     return writer;
   },
@@ -526,6 +552,13 @@ export const TradePair = {
 
           message.QuantityStep = longToNumber(reader.int64() as Long);
           continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.OrganizationID = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -542,6 +575,7 @@ export const TradePair = {
       MetaData: isSet(object.MetaData) ? MetaData.fromJSON(object.MetaData) : undefined,
       PriceTick: isSet(object.PriceTick) ? Decimal.fromJSON(object.PriceTick) : undefined,
       QuantityStep: isSet(object.QuantityStep) ? globalThis.Number(object.QuantityStep) : undefined,
+      OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
     };
   },
 
@@ -561,6 +595,9 @@ export const TradePair = {
     }
     if (message.QuantityStep !== undefined) {
       obj.QuantityStep = Math.round(message.QuantityStep);
+    }
+    if (message.OrganizationID !== "") {
+      obj.OrganizationID = message.OrganizationID;
     }
     return obj;
   },
@@ -583,6 +620,7 @@ export const TradePair = {
       ? Decimal.fromPartial(object.PriceTick)
       : undefined;
     message.QuantityStep = object.QuantityStep ?? undefined;
+    message.OrganizationID = object.OrganizationID ?? "";
     return message;
   },
 };

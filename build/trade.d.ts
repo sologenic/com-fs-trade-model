@@ -24,6 +24,7 @@ export interface Trade {
     Side: Side;
     /** The time the trade was executed in UTC */
     BlockTime: Date | undefined;
+    OrganizationID: string;
     /** Standard storage related fields */
     MetaData: MetaData | undefined;
     TXID?: string | undefined;
@@ -50,6 +51,7 @@ export interface TradePair {
     MetaData: MetaData | undefined;
     PriceTick?: Decimal | undefined;
     QuantityStep?: number | undefined;
+    OrganizationID: string;
 }
 export interface TradePairs {
     TradePairs: TradePair[];
@@ -92,6 +94,7 @@ export declare const Trade: {
         } | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
+        OrganizationID?: string | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -163,6 +166,7 @@ export declare const Trade: {
         } & { [K_4 in Exclude<keyof I["Denom2"], keyof Denom>]: never; }) | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
+        OrganizationID?: string | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -213,6 +217,7 @@ export declare const Trade: {
         } | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
+        OrganizationID?: string | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -284,6 +289,7 @@ export declare const Trade: {
         } & { [K_11 in Exclude<keyof I_1["Denom2"], keyof Denom>]: never; }) | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
+        OrganizationID?: string | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -341,6 +347,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -387,6 +394,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -431,6 +439,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -502,6 +511,7 @@ export declare const Trades: {
             } & { [K_4 in Exclude<keyof I["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -551,6 +561,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -598,6 +609,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -644,6 +656,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -688,6 +701,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -759,6 +773,7 @@ export declare const Trades: {
             } & { [K_13 in Exclude<keyof I_1["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -808,6 +823,7 @@ export declare const Trades: {
             } | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
+            OrganizationID?: string | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -860,6 +876,7 @@ export declare const TradePair: {
             Exp?: number | undefined;
         } | undefined;
         QuantityStep?: number | undefined;
+        OrganizationID?: string | undefined;
     } & {
         Denom1?: ({
             Currency?: {
@@ -924,6 +941,7 @@ export declare const TradePair: {
             Exp?: number | undefined;
         } & { [K_5 in Exclude<keyof I["PriceTick"], keyof Decimal>]: never; }) | undefined;
         QuantityStep?: number | undefined;
+        OrganizationID?: string | undefined;
     } & { [K_6 in Exclude<keyof I, keyof TradePair>]: never; }>(base?: I | undefined): TradePair;
     fromPartial<I_1 extends {
         Denom1?: {
@@ -957,6 +975,7 @@ export declare const TradePair: {
             Exp?: number | undefined;
         } | undefined;
         QuantityStep?: number | undefined;
+        OrganizationID?: string | undefined;
     } & {
         Denom1?: ({
             Currency?: {
@@ -1021,6 +1040,7 @@ export declare const TradePair: {
             Exp?: number | undefined;
         } & { [K_12 in Exclude<keyof I_1["PriceTick"], keyof Decimal>]: never; }) | undefined;
         QuantityStep?: number | undefined;
+        OrganizationID?: string | undefined;
     } & { [K_13 in Exclude<keyof I_1, keyof TradePair>]: never; }>(object: I_1): TradePair;
 };
 export declare const TradePairs: {
@@ -1061,6 +1081,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -1096,6 +1117,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] & ({
             Denom1?: {
                 Currency?: {
@@ -1128,6 +1150,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         } & {
             Denom1?: ({
                 Currency?: {
@@ -1192,6 +1215,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } & { [K_5 in Exclude<keyof I["TradePairs"][number]["PriceTick"], keyof Decimal>]: never; }) | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         } & { [K_6 in Exclude<keyof I["TradePairs"][number], keyof TradePair>]: never; })[] & { [K_7 in Exclude<keyof I["TradePairs"], keyof {
             Denom1?: {
                 Currency?: {
@@ -1224,6 +1248,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
     } & { [K_8 in Exclude<keyof I, keyof TradePairs>]: never; }>(base?: I | undefined): TradePairs;
@@ -1260,6 +1285,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -1295,6 +1321,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[] & ({
             Denom1?: {
                 Currency?: {
@@ -1327,6 +1354,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         } & {
             Denom1?: ({
                 Currency?: {
@@ -1391,6 +1419,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } & { [K_14 in Exclude<keyof I_1["TradePairs"][number]["PriceTick"], keyof Decimal>]: never; }) | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         } & { [K_15 in Exclude<keyof I_1["TradePairs"][number], keyof TradePair>]: never; })[] & { [K_16 in Exclude<keyof I_1["TradePairs"], keyof {
             Denom1?: {
                 Currency?: {
@@ -1423,6 +1452,7 @@ export declare const TradePairs: {
                 Exp?: number | undefined;
             } | undefined;
             QuantityStep?: number | undefined;
+            OrganizationID?: string | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
     } & { [K_17 in Exclude<keyof I_1, keyof TradePairs>]: never; }>(object: I_1): TradePairs;

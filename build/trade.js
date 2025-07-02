@@ -24,6 +24,7 @@ function createBaseTrade() {
         Denom2: undefined,
         Side: 0,
         BlockTime: undefined,
+        OrganizationID: "",
         MetaData: undefined,
         TXID: undefined,
         BlockHeight: 0,
@@ -64,6 +65,9 @@ export const Trade = {
         }
         if (message.BlockTime !== undefined) {
             Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(82).fork()).ldelim();
+        }
+        if (message.OrganizationID !== "") {
+            writer.uint32(90).string(message.OrganizationID);
         }
         if (message.MetaData !== undefined) {
             MetaData.encode(message.MetaData, writer.uint32(242).fork()).ldelim();
@@ -155,6 +159,12 @@ export const Trade = {
                     }
                     message.BlockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
                     continue;
+                case 11:
+                    if (tag !== 90) {
+                        break;
+                    }
+                    message.OrganizationID = reader.string();
+                    continue;
                 case 30:
                     if (tag !== 242) {
                         break;
@@ -217,6 +227,7 @@ export const Trade = {
             Denom2: isSet(object.Denom2) ? Denom.fromJSON(object.Denom2) : undefined,
             Side: isSet(object.Side) ? sideFromJSON(object.Side) : 0,
             BlockTime: isSet(object.BlockTime) ? fromJsonTimestamp(object.BlockTime) : undefined,
+            OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
             MetaData: isSet(object.MetaData) ? MetaData.fromJSON(object.MetaData) : undefined,
             TXID: isSet(object.TXID) ? globalThis.String(object.TXID) : undefined,
             BlockHeight: isSet(object.BlockHeight) ? globalThis.Number(object.BlockHeight) : 0,
@@ -258,6 +269,9 @@ export const Trade = {
         if (message.BlockTime !== undefined) {
             obj.BlockTime = message.BlockTime.toISOString();
         }
+        if (message.OrganizationID !== "") {
+            obj.OrganizationID = message.OrganizationID;
+        }
         if (message.MetaData !== undefined) {
             obj.MetaData = MetaData.toJSON(message.MetaData);
         }
@@ -285,7 +299,7 @@ export const Trade = {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
         const message = createBaseTrade();
         message.Wallet = (_a = object.Wallet) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
@@ -303,15 +317,16 @@ export const Trade = {
             : undefined;
         message.Side = (_f = object.Side) !== null && _f !== void 0 ? _f : 0;
         message.BlockTime = (_g = object.BlockTime) !== null && _g !== void 0 ? _g : undefined;
+        message.OrganizationID = (_h = object.OrganizationID) !== null && _h !== void 0 ? _h : "";
         message.MetaData = (object.MetaData !== undefined && object.MetaData !== null)
             ? MetaData.fromPartial(object.MetaData)
             : undefined;
-        message.TXID = (_h = object.TXID) !== null && _h !== void 0 ? _h : undefined;
-        message.BlockHeight = (_j = object.BlockHeight) !== null && _j !== void 0 ? _j : 0;
-        message.Enriched = (_k = object.Enriched) !== null && _k !== void 0 ? _k : false;
-        message.Processed = (_l = object.Processed) !== null && _l !== void 0 ? _l : false;
-        message.USD = (_m = object.USD) !== null && _m !== void 0 ? _m : undefined;
-        message.Inverted = (_o = object.Inverted) !== null && _o !== void 0 ? _o : false;
+        message.TXID = (_j = object.TXID) !== null && _j !== void 0 ? _j : undefined;
+        message.BlockHeight = (_k = object.BlockHeight) !== null && _k !== void 0 ? _k : 0;
+        message.Enriched = (_l = object.Enriched) !== null && _l !== void 0 ? _l : false;
+        message.Processed = (_m = object.Processed) !== null && _m !== void 0 ? _m : false;
+        message.USD = (_o = object.USD) !== null && _o !== void 0 ? _o : undefined;
+        message.Inverted = (_p = object.Inverted) !== null && _p !== void 0 ? _p : false;
         return message;
     },
 };
@@ -368,7 +383,14 @@ export const Trades = {
     },
 };
 function createBaseTradePair() {
-    return { Denom1: undefined, Denom2: undefined, MetaData: undefined, PriceTick: undefined, QuantityStep: undefined };
+    return {
+        Denom1: undefined,
+        Denom2: undefined,
+        MetaData: undefined,
+        PriceTick: undefined,
+        QuantityStep: undefined,
+        OrganizationID: "",
+    };
 }
 export const TradePair = {
     encode(message, writer = _m0.Writer.create()) {
@@ -386,6 +408,9 @@ export const TradePair = {
         }
         if (message.QuantityStep !== undefined) {
             writer.uint32(40).int64(message.QuantityStep);
+        }
+        if (message.OrganizationID !== "") {
+            writer.uint32(50).string(message.OrganizationID);
         }
         return writer;
     },
@@ -426,6 +451,12 @@ export const TradePair = {
                     }
                     message.QuantityStep = longToNumber(reader.int64());
                     continue;
+                case 6:
+                    if (tag !== 50) {
+                        break;
+                    }
+                    message.OrganizationID = reader.string();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -441,6 +472,7 @@ export const TradePair = {
             MetaData: isSet(object.MetaData) ? MetaData.fromJSON(object.MetaData) : undefined,
             PriceTick: isSet(object.PriceTick) ? Decimal.fromJSON(object.PriceTick) : undefined,
             QuantityStep: isSet(object.QuantityStep) ? globalThis.Number(object.QuantityStep) : undefined,
+            OrganizationID: isSet(object.OrganizationID) ? globalThis.String(object.OrganizationID) : "",
         };
     },
     toJSON(message) {
@@ -460,13 +492,16 @@ export const TradePair = {
         if (message.QuantityStep !== undefined) {
             obj.QuantityStep = Math.round(message.QuantityStep);
         }
+        if (message.OrganizationID !== "") {
+            obj.OrganizationID = message.OrganizationID;
+        }
         return obj;
     },
     create(base) {
         return TradePair.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a;
+        var _a, _b;
         const message = createBaseTradePair();
         message.Denom1 = (object.Denom1 !== undefined && object.Denom1 !== null)
             ? Denom.fromPartial(object.Denom1)
@@ -481,6 +516,7 @@ export const TradePair = {
             ? Decimal.fromPartial(object.PriceTick)
             : undefined;
         message.QuantityStep = (_a = object.QuantityStep) !== null && _a !== void 0 ? _a : undefined;
+        message.OrganizationID = (_b = object.OrganizationID) !== null && _b !== void 0 ? _b : "";
         return message;
     },
 };

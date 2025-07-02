@@ -22,6 +22,7 @@ message Trade {
     denom.Denom Denom2 = 8; // Asset denom (e.g. suaapl_1-smartContractAddr)
     orderproperties.Side Side = 9;  // The buy/sell (e.g. did the user place a buy or sell order)
     google.protobuf.Timestamp BlockTime = 10; // The time the trade was executed in UTC
+    string OrganizationID = 11;
 
     // Standard storage related fields
     metadata.MetaData MetaData = 30;
@@ -36,7 +37,7 @@ message Trade {
     // Trades get stored in alphabetical order of the denom pair. 
     // Data is "uninverted" on retrieval and 
     // this flag only indicates that the denoms as seen in the record are not in the original order
-    bool Inverted = 50; 
+    bool Inverted = 50;
 }
 
 message Trades {
@@ -48,7 +49,8 @@ message TradePair {
     denom.Denom Denom2 = 2;
     metadata.MetaData MetaData = 3;
     optional decimal.Decimal PriceTick = 4; 
-    optional int64 QuantityStep = 5; 
+    optional int64 QuantityStep = 5;
+    string OrganizationID = 6;
 }
 
 message TradePairs {

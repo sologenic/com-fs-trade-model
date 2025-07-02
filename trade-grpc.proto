@@ -12,21 +12,22 @@ import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
 import "trade.proto";
 
 service TradeService {
-    // Get a single trade
+    // Trade
     rpc Get(ID) returns (Trade) {}
     rpc Upsert(Trade) returns (google.protobuf.Empty) {}
     rpc BatchUpsert(Trades) returns (google.protobuf.Empty) {}
+    rpc List(Filter) returns (Trades) {}
 
-    rpc GetAll(Filter) returns (Trades) {}
-
+    // TradePair
     rpc GetTradePairs(TradePairFilter) returns (TradePairs) {}
     rpc UpsertTradePair(TradePair) returns (google.protobuf.Empty) {}
 }
 
 message ID {
-    metadata.Network Network = 1;
+    int64 Sequence = 1;
     string TXID = 2;
-    int64 Sequence = 3;
+    string OrganizaionID = 3; // Organization ID for the trade
+    metadata.Network Network = 4;
 }
 
 // Ability to get all trade history views using the filter options
@@ -42,6 +43,7 @@ message Filter {
     optional denom.Denom Denom2 = 9;
     optional int64 Offset = 10;
     optional orderproperties.Side Side = 11;
+    string OrganizationID = 12;
 }
 
 message TradePairFilter {
