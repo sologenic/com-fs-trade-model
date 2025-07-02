@@ -15,7 +15,8 @@ export const protobufPackage = "trade";
 function createBaseTrade() {
     return {
         Wallet: "",
-        OrderID: "",
+        OrderKey: "",
+        OrderID: 0,
         Sequence: 0,
         Amount: undefined,
         Price: 0,
@@ -37,29 +38,32 @@ export const Trade = {
         if (message.Wallet !== "") {
             writer.uint32(10).string(message.Wallet);
         }
-        if (message.OrderID !== "") {
-            writer.uint32(18).string(message.OrderID);
+        if (message.OrderKey !== "") {
+            writer.uint32(18).string(message.OrderKey);
+        }
+        if (message.OrderID !== 0) {
+            writer.uint32(24).int64(message.OrderID);
         }
         if (message.Sequence !== 0) {
-            writer.uint32(24).int64(message.Sequence);
+            writer.uint32(32).int64(message.Sequence);
         }
         if (message.Amount !== undefined) {
-            Decimal.encode(message.Amount, writer.uint32(34).fork()).ldelim();
+            Decimal.encode(message.Amount, writer.uint32(42).fork()).ldelim();
         }
         if (message.Price !== 0) {
-            writer.uint32(41).double(message.Price);
+            writer.uint32(49).double(message.Price);
         }
         if (message.Denom1 !== undefined) {
-            Denom.encode(message.Denom1, writer.uint32(50).fork()).ldelim();
+            Denom.encode(message.Denom1, writer.uint32(58).fork()).ldelim();
         }
         if (message.Denom2 !== undefined) {
-            Denom.encode(message.Denom2, writer.uint32(58).fork()).ldelim();
+            Denom.encode(message.Denom2, writer.uint32(66).fork()).ldelim();
         }
         if (message.Side !== 0) {
-            writer.uint32(64).int32(message.Side);
+            writer.uint32(72).int32(message.Side);
         }
         if (message.BlockTime !== undefined) {
-            Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(74).fork()).ldelim();
+            Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(82).fork()).ldelim();
         }
         if (message.MetaData !== undefined) {
             MetaData.encode(message.MetaData, writer.uint32(242).fork()).ldelim();
@@ -101,46 +105,52 @@ export const Trade = {
                     if (tag !== 18) {
                         break;
                     }
-                    message.OrderID = reader.string();
+                    message.OrderKey = reader.string();
                     continue;
                 case 3:
                     if (tag !== 24) {
                         break;
                     }
-                    message.Sequence = longToNumber(reader.int64());
+                    message.OrderID = longToNumber(reader.int64());
                     continue;
                 case 4:
-                    if (tag !== 34) {
+                    if (tag !== 32) {
+                        break;
+                    }
+                    message.Sequence = longToNumber(reader.int64());
+                    continue;
+                case 5:
+                    if (tag !== 42) {
                         break;
                     }
                     message.Amount = Decimal.decode(reader, reader.uint32());
                     continue;
-                case 5:
-                    if (tag !== 41) {
+                case 6:
+                    if (tag !== 49) {
                         break;
                     }
                     message.Price = reader.double();
-                    continue;
-                case 6:
-                    if (tag !== 50) {
-                        break;
-                    }
-                    message.Denom1 = Denom.decode(reader, reader.uint32());
                     continue;
                 case 7:
                     if (tag !== 58) {
                         break;
                     }
-                    message.Denom2 = Denom.decode(reader, reader.uint32());
+                    message.Denom1 = Denom.decode(reader, reader.uint32());
                     continue;
                 case 8:
-                    if (tag !== 64) {
+                    if (tag !== 66) {
+                        break;
+                    }
+                    message.Denom2 = Denom.decode(reader, reader.uint32());
+                    continue;
+                case 9:
+                    if (tag !== 72) {
                         break;
                     }
                     message.Side = reader.int32();
                     continue;
-                case 9:
-                    if (tag !== 74) {
+                case 10:
+                    if (tag !== 82) {
                         break;
                     }
                     message.BlockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
@@ -198,7 +208,8 @@ export const Trade = {
     fromJSON(object) {
         return {
             Wallet: isSet(object.Wallet) ? globalThis.String(object.Wallet) : "",
-            OrderID: isSet(object.OrderID) ? globalThis.String(object.OrderID) : "",
+            OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
+            OrderID: isSet(object.OrderID) ? globalThis.Number(object.OrderID) : 0,
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
             Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
             Price: isSet(object.Price) ? globalThis.Number(object.Price) : 0,
@@ -220,8 +231,11 @@ export const Trade = {
         if (message.Wallet !== "") {
             obj.Wallet = message.Wallet;
         }
-        if (message.OrderID !== "") {
-            obj.OrderID = message.OrderID;
+        if (message.OrderKey !== "") {
+            obj.OrderKey = message.OrderKey;
+        }
+        if (message.OrderID !== 0) {
+            obj.OrderID = Math.round(message.OrderID);
         }
         if (message.Sequence !== 0) {
             obj.Sequence = Math.round(message.Sequence);
@@ -271,32 +285,33 @@ export const Trade = {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
         const message = createBaseTrade();
         message.Wallet = (_a = object.Wallet) !== null && _a !== void 0 ? _a : "";
-        message.OrderID = (_b = object.OrderID) !== null && _b !== void 0 ? _b : "";
-        message.Sequence = (_c = object.Sequence) !== null && _c !== void 0 ? _c : 0;
+        message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
+        message.OrderID = (_c = object.OrderID) !== null && _c !== void 0 ? _c : 0;
+        message.Sequence = (_d = object.Sequence) !== null && _d !== void 0 ? _d : 0;
         message.Amount = (object.Amount !== undefined && object.Amount !== null)
             ? Decimal.fromPartial(object.Amount)
             : undefined;
-        message.Price = (_d = object.Price) !== null && _d !== void 0 ? _d : 0;
+        message.Price = (_e = object.Price) !== null && _e !== void 0 ? _e : 0;
         message.Denom1 = (object.Denom1 !== undefined && object.Denom1 !== null)
             ? Denom.fromPartial(object.Denom1)
             : undefined;
         message.Denom2 = (object.Denom2 !== undefined && object.Denom2 !== null)
             ? Denom.fromPartial(object.Denom2)
             : undefined;
-        message.Side = (_e = object.Side) !== null && _e !== void 0 ? _e : 0;
-        message.BlockTime = (_f = object.BlockTime) !== null && _f !== void 0 ? _f : undefined;
+        message.Side = (_f = object.Side) !== null && _f !== void 0 ? _f : 0;
+        message.BlockTime = (_g = object.BlockTime) !== null && _g !== void 0 ? _g : undefined;
         message.MetaData = (object.MetaData !== undefined && object.MetaData !== null)
             ? MetaData.fromPartial(object.MetaData)
             : undefined;
-        message.TXID = (_g = object.TXID) !== null && _g !== void 0 ? _g : undefined;
-        message.BlockHeight = (_h = object.BlockHeight) !== null && _h !== void 0 ? _h : 0;
-        message.Enriched = (_j = object.Enriched) !== null && _j !== void 0 ? _j : false;
-        message.Processed = (_k = object.Processed) !== null && _k !== void 0 ? _k : false;
-        message.USD = (_l = object.USD) !== null && _l !== void 0 ? _l : undefined;
-        message.Inverted = (_m = object.Inverted) !== null && _m !== void 0 ? _m : false;
+        message.TXID = (_h = object.TXID) !== null && _h !== void 0 ? _h : undefined;
+        message.BlockHeight = (_j = object.BlockHeight) !== null && _j !== void 0 ? _j : 0;
+        message.Enriched = (_k = object.Enriched) !== null && _k !== void 0 ? _k : false;
+        message.Processed = (_l = object.Processed) !== null && _l !== void 0 ? _l : false;
+        message.USD = (_m = object.USD) !== null && _m !== void 0 ? _m : undefined;
+        message.Inverted = (_o = object.Inverted) !== null && _o !== void 0 ? _o : false;
         return message;
     },
 };

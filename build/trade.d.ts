@@ -8,8 +8,10 @@ export declare const protobufPackage = "trade";
 export interface Trade {
     /** Wallet Address of user who placed the order */
     Wallet: string;
-    /** Order key: OrderID-SmartContractAddr-Network */
-    OrderID: string;
+    /** Datastore key: OrderID-SmartContractAddr-Network */
+    OrderKey: string;
+    /** Order ID assigned by the smart contract */
+    OrderID: number;
     /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
     Sequence: number;
     Amount: Decimal | undefined;
@@ -60,7 +62,8 @@ export declare const Trade: {
     toJSON(message: Trade): unknown;
     create<I extends {
         Wallet?: string | undefined;
-        OrderID?: string | undefined;
+        OrderKey?: string | undefined;
+        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: {
             Value?: number | undefined;
@@ -103,7 +106,8 @@ export declare const Trade: {
         Inverted?: boolean | undefined;
     } & {
         Wallet?: string | undefined;
-        OrderID?: string | undefined;
+        OrderKey?: string | undefined;
+        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: ({
             Value?: number | undefined;
@@ -179,7 +183,8 @@ export declare const Trade: {
     } & { [K_6 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
     fromPartial<I_1 extends {
         Wallet?: string | undefined;
-        OrderID?: string | undefined;
+        OrderKey?: string | undefined;
+        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: {
             Value?: number | undefined;
@@ -222,7 +227,8 @@ export declare const Trade: {
         Inverted?: boolean | undefined;
     } & {
         Wallet?: string | undefined;
-        OrderID?: string | undefined;
+        OrderKey?: string | undefined;
+        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: ({
             Value?: number | undefined;
@@ -305,7 +311,8 @@ export declare const Trades: {
     create<I extends {
         Trades?: {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -350,7 +357,8 @@ export declare const Trades: {
     } & {
         Trades?: ({
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -393,7 +401,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         }[] & ({
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -436,7 +445,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         } & {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: ({
                 Value?: number | undefined;
@@ -511,7 +521,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -557,7 +568,8 @@ export declare const Trades: {
     fromPartial<I_1 extends {
         Trades?: {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -602,7 +614,8 @@ export declare const Trades: {
     } & {
         Trades?: ({
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -645,7 +658,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         }[] & ({
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -688,7 +702,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         } & {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: ({
                 Value?: number | undefined;
@@ -763,7 +778,8 @@ export declare const Trades: {
             Inverted?: boolean | undefined;
         } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
             Wallet?: string | undefined;
-            OrderID?: string | undefined;
+            OrderKey?: string | undefined;
+            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
