@@ -21,8 +21,6 @@ export interface Trade {
   Wallet: string;
   /** Datastore key: OrderID-SmartContractAddr-Network */
   OrderKey: string;
-  /** Order ID assigned by the smart contract */
-  OrderID: number;
   /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
   Sequence: number;
   Amount: Decimal | undefined;
@@ -82,7 +80,6 @@ function createBaseTrade(): Trade {
   return {
     Wallet: "",
     OrderKey: "",
-    OrderID: 0,
     Sequence: 0,
     Amount: undefined,
     Price: 0,
@@ -109,32 +106,29 @@ export const Trade = {
     if (message.OrderKey !== "") {
       writer.uint32(18).string(message.OrderKey);
     }
-    if (message.OrderID !== 0) {
-      writer.uint32(24).int64(message.OrderID);
-    }
     if (message.Sequence !== 0) {
-      writer.uint32(32).int64(message.Sequence);
+      writer.uint32(24).int64(message.Sequence);
     }
     if (message.Amount !== undefined) {
-      Decimal.encode(message.Amount, writer.uint32(42).fork()).ldelim();
+      Decimal.encode(message.Amount, writer.uint32(34).fork()).ldelim();
     }
     if (message.Price !== 0) {
-      writer.uint32(49).double(message.Price);
+      writer.uint32(41).double(message.Price);
     }
     if (message.Denom1 !== undefined) {
-      Denom.encode(message.Denom1, writer.uint32(58).fork()).ldelim();
+      Denom.encode(message.Denom1, writer.uint32(50).fork()).ldelim();
     }
     if (message.Denom2 !== undefined) {
-      Denom.encode(message.Denom2, writer.uint32(66).fork()).ldelim();
+      Denom.encode(message.Denom2, writer.uint32(58).fork()).ldelim();
     }
     if (message.Side !== 0) {
-      writer.uint32(72).int32(message.Side);
+      writer.uint32(64).int32(message.Side);
     }
     if (message.BlockTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(82).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.BlockTime), writer.uint32(74).fork()).ldelim();
     }
     if (message.OrganizationID !== "") {
-      writer.uint32(90).string(message.OrganizationID);
+      writer.uint32(82).string(message.OrganizationID);
     }
     if (message.MetaData !== undefined) {
       MetaData.encode(message.MetaData, writer.uint32(242).fork()).ldelim();
@@ -186,59 +180,52 @@ export const Trade = {
             break;
           }
 
-          message.OrderID = longToNumber(reader.int64() as Long);
-          continue;
-        case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.Sequence = longToNumber(reader.int64() as Long);
           continue;
-        case 5:
-          if (tag !== 42) {
+        case 4:
+          if (tag !== 34) {
             break;
           }
 
           message.Amount = Decimal.decode(reader, reader.uint32());
           continue;
-        case 6:
-          if (tag !== 49) {
+        case 5:
+          if (tag !== 41) {
             break;
           }
 
           message.Price = reader.double();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.Denom1 = Denom.decode(reader, reader.uint32());
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          message.Denom1 = Denom.decode(reader, reader.uint32());
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.Denom2 = Denom.decode(reader, reader.uint32());
           continue;
-        case 9:
-          if (tag !== 72) {
+        case 8:
+          if (tag !== 64) {
             break;
           }
 
           message.Side = reader.int32() as any;
           continue;
-        case 10:
-          if (tag !== 82) {
+        case 9:
+          if (tag !== 74) {
             break;
           }
 
           message.BlockTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
-        case 11:
-          if (tag !== 90) {
+        case 10:
+          if (tag !== 82) {
             break;
           }
 
@@ -306,7 +293,6 @@ export const Trade = {
     return {
       Wallet: isSet(object.Wallet) ? globalThis.String(object.Wallet) : "",
       OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
-      OrderID: isSet(object.OrderID) ? globalThis.Number(object.OrderID) : 0,
       Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
       Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
       Price: isSet(object.Price) ? globalThis.Number(object.Price) : 0,
@@ -332,9 +318,6 @@ export const Trade = {
     }
     if (message.OrderKey !== "") {
       obj.OrderKey = message.OrderKey;
-    }
-    if (message.OrderID !== 0) {
-      obj.OrderID = Math.round(message.OrderID);
     }
     if (message.Sequence !== 0) {
       obj.Sequence = Math.round(message.Sequence);
@@ -391,7 +374,6 @@ export const Trade = {
     const message = createBaseTrade();
     message.Wallet = object.Wallet ?? "";
     message.OrderKey = object.OrderKey ?? "";
-    message.OrderID = object.OrderID ?? 0;
     message.Sequence = object.Sequence ?? 0;
     message.Amount = (object.Amount !== undefined && object.Amount !== null)
       ? Decimal.fromPartial(object.Amount)

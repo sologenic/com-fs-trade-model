@@ -35,9 +35,9 @@ message Filter {
     metadata.Network Network = 1;
     optional google.protobuf.Timestamp From = 2;
     optional google.protobuf.Timestamp To = 3;
-    optional string UserID = 4;
+    optional string Wallet = 4; // Wallet address
     optional int64 Sequence = 5;
-    optional string OrderID = 6;
+    optional string OrderKey = 6; // Datastore key
     optional string TXID = 7;
     optional denom.Denom Denom1 = 8;
     optional denom.Denom Denom2 = 9;

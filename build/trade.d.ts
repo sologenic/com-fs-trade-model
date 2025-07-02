@@ -10,8 +10,6 @@ export interface Trade {
     Wallet: string;
     /** Datastore key: OrderID-SmartContractAddr-Network */
     OrderKey: string;
-    /** Order ID assigned by the smart contract */
-    OrderID: number;
     /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
     Sequence: number;
     Amount: Decimal | undefined;
@@ -65,7 +63,6 @@ export declare const Trade: {
     create<I extends {
         Wallet?: string | undefined;
         OrderKey?: string | undefined;
-        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: {
             Value?: number | undefined;
@@ -110,7 +107,6 @@ export declare const Trade: {
     } & {
         Wallet?: string | undefined;
         OrderKey?: string | undefined;
-        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: ({
             Value?: number | undefined;
@@ -188,7 +184,6 @@ export declare const Trade: {
     fromPartial<I_1 extends {
         Wallet?: string | undefined;
         OrderKey?: string | undefined;
-        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: {
             Value?: number | undefined;
@@ -233,7 +228,6 @@ export declare const Trade: {
     } & {
         Wallet?: string | undefined;
         OrderKey?: string | undefined;
-        OrderID?: number | undefined;
         Sequence?: number | undefined;
         Amount?: ({
             Value?: number | undefined;
@@ -318,7 +312,6 @@ export declare const Trades: {
         Trades?: {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -365,7 +358,6 @@ export declare const Trades: {
         Trades?: ({
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -410,7 +402,6 @@ export declare const Trades: {
         }[] & ({
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -455,7 +446,6 @@ export declare const Trades: {
         } & {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: ({
                 Value?: number | undefined;
@@ -532,7 +522,6 @@ export declare const Trades: {
         } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -580,7 +569,6 @@ export declare const Trades: {
         Trades?: {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -627,7 +615,6 @@ export declare const Trades: {
         Trades?: ({
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -672,7 +659,6 @@ export declare const Trades: {
         }[] & ({
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
@@ -717,7 +703,6 @@ export declare const Trades: {
         } & {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: ({
                 Value?: number | undefined;
@@ -794,7 +779,6 @@ export declare const Trades: {
         } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
             Wallet?: string | undefined;
             OrderKey?: string | undefined;
-            OrderID?: number | undefined;
             Sequence?: number | undefined;
             Amount?: {
                 Value?: number | undefined;
