@@ -41,6 +41,7 @@ message Trade {
 
 message Trades {
     repeated Trade Trades = 1;
+    optional int32 Offset = 2; // Offset for pagination
 }
 
 message TradePair {

@@ -316,12 +316,15 @@ export const Trade = {
     },
 };
 function createBaseTrades() {
-    return { Trades: [] };
+    return { Trades: [], Offset: undefined };
 }
 export const Trades = {
     encode(message, writer = _m0.Writer.create()) {
         for (const v of message.Trades) {
             Trade.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.Offset !== undefined) {
+            writer.uint32(16).int32(message.Offset);
         }
         return writer;
     },
@@ -338,6 +341,12 @@ export const Trades = {
                     }
                     message.Trades.push(Trade.decode(reader, reader.uint32()));
                     continue;
+                case 2:
+                    if (tag !== 16) {
+                        break;
+                    }
+                    message.Offset = reader.int32();
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -347,7 +356,10 @@ export const Trades = {
         return message;
     },
     fromJSON(object) {
-        return { Trades: globalThis.Array.isArray(object === null || object === void 0 ? void 0 : object.Trades) ? object.Trades.map((e) => Trade.fromJSON(e)) : [] };
+        return {
+            Trades: globalThis.Array.isArray(object === null || object === void 0 ? void 0 : object.Trades) ? object.Trades.map((e) => Trade.fromJSON(e)) : [],
+            Offset: isSet(object.Offset) ? globalThis.Number(object.Offset) : undefined,
+        };
     },
     toJSON(message) {
         var _a;
@@ -355,15 +367,19 @@ export const Trades = {
         if ((_a = message.Trades) === null || _a === void 0 ? void 0 : _a.length) {
             obj.Trades = message.Trades.map((e) => Trade.toJSON(e));
         }
+        if (message.Offset !== undefined) {
+            obj.Offset = Math.round(message.Offset);
+        }
         return obj;
     },
     create(base) {
         return Trades.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a;
+        var _a, _b;
         const message = createBaseTrades();
         message.Trades = ((_a = object.Trades) === null || _a === void 0 ? void 0 : _a.map((e) => Trade.fromPartial(e))) || [];
+        message.Offset = (_b = object.Offset) !== null && _b !== void 0 ? _b : undefined;
         return message;
     },
 };

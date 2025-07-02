@@ -42,6 +42,8 @@ export interface Trade {
 }
 export interface Trades {
     Trades: Trade[];
+    /** Offset for pagination */
+    Offset?: number | undefined;
 }
 export interface TradePair {
     Denom1: Denom | undefined;
@@ -354,6 +356,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
+        Offset?: number | undefined;
     } & {
         Trades?: ({
             Wallet?: string | undefined;
@@ -564,7 +567,8 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
-    } & { [K_8 in Exclude<keyof I, "Trades">]: never; }>(base?: I | undefined): Trades;
+        Offset?: number | undefined;
+    } & { [K_8 in Exclude<keyof I, keyof Trades>]: never; }>(base?: I | undefined): Trades;
     fromPartial<I_1 extends {
         Trades?: {
             Wallet?: string | undefined;
@@ -611,6 +615,7 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
+        Offset?: number | undefined;
     } & {
         Trades?: ({
             Wallet?: string | undefined;
@@ -821,7 +826,8 @@ export declare const Trades: {
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
-    } & { [K_17 in Exclude<keyof I_1, "Trades">]: never; }>(object: I_1): Trades;
+        Offset?: number | undefined;
+    } & { [K_17 in Exclude<keyof I_1, keyof Trades>]: never; }>(object: I_1): Trades;
 };
 export declare const TradePair: {
     encode(message: TradePair, writer?: _m0.Writer): _m0.Writer;

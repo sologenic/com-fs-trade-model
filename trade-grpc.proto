@@ -51,4 +51,5 @@ message TradePairFilter {
     optional denom.Denom Denom1 = 2;
     optional denom.Denom Denom2 = 3;
     optional int32 Offset = 4;
+    string OrganizationID = 5;
 }

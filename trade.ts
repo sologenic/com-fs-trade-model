@@ -60,6 +60,8 @@ export interface Trade {
 
 export interface Trades {
   Trades: Trade[];
+  /** Offset for pagination */
+  Offset?: number | undefined;
 }
 
 export interface TradePair {
@@ -402,13 +404,16 @@ export const Trade = {
 };
 
 function createBaseTrades(): Trades {
-  return { Trades: [] };
+  return { Trades: [], Offset: undefined };
 }
 
 export const Trades = {
   encode(message: Trades, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.Trades) {
       Trade.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.Offset !== undefined) {
+      writer.uint32(16).int32(message.Offset);
     }
     return writer;
   },
@@ -427,6 +432,13 @@ export const Trades = {
 
           message.Trades.push(Trade.decode(reader, reader.uint32()));
           continue;
+        case 2:
+          if (tag !== 16) {
+            break;
+          }
+
+          message.Offset = reader.int32();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -437,13 +449,19 @@ export const Trades = {
   },
 
   fromJSON(object: any): Trades {
-    return { Trades: globalThis.Array.isArray(object?.Trades) ? object.Trades.map((e: any) => Trade.fromJSON(e)) : [] };
+    return {
+      Trades: globalThis.Array.isArray(object?.Trades) ? object.Trades.map((e: any) => Trade.fromJSON(e)) : [],
+      Offset: isSet(object.Offset) ? globalThis.Number(object.Offset) : undefined,
+    };
   },
 
   toJSON(message: Trades): unknown {
     const obj: any = {};
     if (message.Trades?.length) {
       obj.Trades = message.Trades.map((e) => Trade.toJSON(e));
+    }
+    if (message.Offset !== undefined) {
+      obj.Offset = Math.round(message.Offset);
     }
     return obj;
   },
@@ -454,6 +472,7 @@ export const Trades = {
   fromPartial<I extends Exact<DeepPartial<Trades>, I>>(object: I): Trades {
     const message = createBaseTrades();
     message.Trades = object.Trades?.map((e) => Trade.fromPartial(e)) || [];
+    message.Offset = object.Offset ?? undefined;
     return message;
   },
 };
