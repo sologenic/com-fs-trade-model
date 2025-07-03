@@ -14,7 +14,7 @@ import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/or
 export const protobufPackage = "trade";
 function createBaseTrade() {
     return {
-        Wallet: "",
+        UserID: "",
         OrderKey: "",
         Sequence: 0,
         Amount: undefined,
@@ -35,8 +35,8 @@ function createBaseTrade() {
 }
 export const Trade = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.Wallet !== "") {
-            writer.uint32(10).string(message.Wallet);
+        if (message.UserID !== "") {
+            writer.uint32(10).string(message.UserID);
         }
         if (message.OrderKey !== "") {
             writer.uint32(18).string(message.OrderKey);
@@ -99,7 +99,7 @@ export const Trade = {
                     if (tag !== 10) {
                         break;
                     }
-                    message.Wallet = reader.string();
+                    message.UserID = reader.string();
                     continue;
                 case 2:
                     if (tag !== 18) {
@@ -207,7 +207,7 @@ export const Trade = {
     },
     fromJSON(object) {
         return {
-            Wallet: isSet(object.Wallet) ? globalThis.String(object.Wallet) : "",
+            UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
             OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
             Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
@@ -228,8 +228,8 @@ export const Trade = {
     },
     toJSON(message) {
         const obj = {};
-        if (message.Wallet !== "") {
-            obj.Wallet = message.Wallet;
+        if (message.UserID !== "") {
+            obj.UserID = message.UserID;
         }
         if (message.OrderKey !== "") {
             obj.OrderKey = message.OrderKey;
@@ -287,7 +287,7 @@ export const Trade = {
     fromPartial(object) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
         const message = createBaseTrade();
-        message.Wallet = (_a = object.Wallet) !== null && _a !== void 0 ? _a : "";
+        message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
         message.Sequence = (_c = object.Sequence) !== null && _c !== void 0 ? _c : 0;
         message.Amount = (object.Amount !== undefined && object.Amount !== null)

@@ -17,8 +17,7 @@ export const protobufPackage = "trade";
 
 /** Key in store is TXID-Sequence-Metadata.Network */
 export interface Trade {
-  /** Wallet Address of user who placed the order */
-  Wallet: string;
+  UserID: string;
   /** Datastore key: OrderID-SmartContractAddr-Network */
   OrderKey: string;
   /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
@@ -80,7 +79,7 @@ export interface TradePairs {
 
 function createBaseTrade(): Trade {
   return {
-    Wallet: "",
+    UserID: "",
     OrderKey: "",
     Sequence: 0,
     Amount: undefined,
@@ -102,8 +101,8 @@ function createBaseTrade(): Trade {
 
 export const Trade = {
   encode(message: Trade, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.Wallet !== "") {
-      writer.uint32(10).string(message.Wallet);
+    if (message.UserID !== "") {
+      writer.uint32(10).string(message.UserID);
     }
     if (message.OrderKey !== "") {
       writer.uint32(18).string(message.OrderKey);
@@ -168,7 +167,7 @@ export const Trade = {
             break;
           }
 
-          message.Wallet = reader.string();
+          message.UserID = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
@@ -293,7 +292,7 @@ export const Trade = {
 
   fromJSON(object: any): Trade {
     return {
-      Wallet: isSet(object.Wallet) ? globalThis.String(object.Wallet) : "",
+      UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
       OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
       Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
       Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
@@ -315,8 +314,8 @@ export const Trade = {
 
   toJSON(message: Trade): unknown {
     const obj: any = {};
-    if (message.Wallet !== "") {
-      obj.Wallet = message.Wallet;
+    if (message.UserID !== "") {
+      obj.UserID = message.UserID;
     }
     if (message.OrderKey !== "") {
       obj.OrderKey = message.OrderKey;
@@ -374,7 +373,7 @@ export const Trade = {
   },
   fromPartial<I extends Exact<DeepPartial<Trade>, I>>(object: I): Trade {
     const message = createBaseTrade();
-    message.Wallet = object.Wallet ?? "";
+    message.UserID = object.UserID ?? "";
     message.OrderKey = object.OrderKey ?? "";
     message.Sequence = object.Sequence ?? 0;
     message.Amount = (object.Amount !== undefined && object.Amount !== null)
