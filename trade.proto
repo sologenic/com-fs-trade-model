@@ -43,17 +43,3 @@ message Trades {
     repeated Trade Trades = 1;
     optional int32 Offset = 2; // Offset for pagination
 }
-
-message TradePair {
-    denom.Denom Denom1 = 1;
-    denom.Denom Denom2 = 2;
-    metadata.MetaData MetaData = 3;
-    optional decimal.Decimal PriceTick = 4; 
-    optional int64 QuantityStep = 5;
-    string OrganizationID = 6;
-}
-
-message TradePairs {
-    repeated TradePair TradePairs = 1;
-    optional int32 Offset = 2;
-}
