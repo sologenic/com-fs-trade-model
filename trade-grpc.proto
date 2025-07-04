@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package trade;
+
+option go_package = "github.com/sologenic/com-fs-trade-model;trade";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
+import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
+import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
+import "trade.proto";
+
+service TradeService {
+    // Trade
+    rpc Get(ID) returns (Trade) {}
+    rpc Upsert(Trade) returns (google.protobuf.Empty) {}
+    rpc BatchUpsert(Trades) returns (google.protobuf.Empty) {}
+    rpc List(Filter) returns (Trades) {}
+
+    // TradePair
+    rpc GetTradePairs(TradePairFilter) returns (TradePairs) {}
+    rpc UpsertTradePair(TradePair) returns (google.protobuf.Empty) {}
+}
+
+message ID {
+    string TXID = 1;
+    string OrganizaionID = 2; // Organization ID for the trade
+    metadata.Network Network = 3;
+}
+
+// Ability to get all trade history views using the filter options
+message Filter {
+    metadata.Network Network = 1;
+    optional google.protobuf.Timestamp From = 2;
+    optional google.protobuf.Timestamp To = 3;
+    optional string Wallet = 4; // Wallet address
+    optional int64 Sequence = 5;
+    optional string OrderKey = 6; // Datastore key
+    optional string TXID = 7;
+    optional denom.Denom Denom1 = 8;
+    optional denom.Denom Denom2 = 9;
+    optional int32 Offset = 10;
+    optional orderproperties.Side Side = 11;
+    string OrganizationID = 12;
+}
+
+message TradePairFilter {
+    metadata.Network Network = 1;
+    optional denom.Denom Denom1 = 2;
+    optional denom.Denom Denom2 = 3;
+    optional int32 Offset = 4;
+    string OrganizationID = 5;
+}
