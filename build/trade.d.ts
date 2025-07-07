@@ -6,16 +6,12 @@ import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order
 export declare const protobufPackage = "trade";
 export declare enum Status {
     NOT_USED_STATUS = 0,
-    /** EXECUTED - The trade was executed */
-    EXECUTED = 1,
-    /** CANCELLED - The trade was cancelled */
-    CANCELLED = 2,
-    /** PLACED - The trade was placed but not yet executed */
-    PLACED = 3,
-    /** EXPIRED - The trade was expired */
-    EXPIRED = 4,
-    /** PENDING - The trade is pending execution */
-    PENDING = 5,
+    PARTIALLY_FILLED = 1,
+    FILLED = 2,
+    CANCELLED = 3,
+    PLACED = 4,
+    EXPIRED = 5,
+    PENDING = 6,
     UNRECOGNIZED = -1
 }
 export declare function statusFromJSON(object: any): Status;

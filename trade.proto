@@ -50,9 +50,10 @@ message Trades {
 
 enum Status {
     NOT_USED_STATUS = 0;
-    EXECUTED = 1; // The trade was executed
-    CANCELLED = 2; // The trade was cancelled
-    PLACED = 3; // The trade was placed but not yet executed
-    EXPIRED = 4; // The trade was expired
-    PENDING = 5; // The trade is pending execution
+    PARTIALLY_FILLED = 1;
+    FILLED = 2;
+    CANCELLED = 3;
+    PLACED = 4;
+    EXPIRED = 5;
+    PENDING = 6;
 }

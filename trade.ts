@@ -17,16 +17,12 @@ export const protobufPackage = "trade";
 
 export enum Status {
   NOT_USED_STATUS = 0,
-  /** EXECUTED - The trade was executed */
-  EXECUTED = 1,
-  /** CANCELLED - The trade was cancelled */
-  CANCELLED = 2,
-  /** PLACED - The trade was placed but not yet executed */
-  PLACED = 3,
-  /** EXPIRED - The trade was expired */
-  EXPIRED = 4,
-  /** PENDING - The trade is pending execution */
-  PENDING = 5,
+  PARTIALLY_FILLED = 1,
+  FILLED = 2,
+  CANCELLED = 3,
+  PLACED = 4,
+  EXPIRED = 5,
+  PENDING = 6,
   UNRECOGNIZED = -1,
 }
 
@@ -36,18 +32,21 @@ export function statusFromJSON(object: any): Status {
     case "NOT_USED_STATUS":
       return Status.NOT_USED_STATUS;
     case 1:
-    case "EXECUTED":
-      return Status.EXECUTED;
+    case "PARTIALLY_FILLED":
+      return Status.PARTIALLY_FILLED;
     case 2:
+    case "FILLED":
+      return Status.FILLED;
+    case 3:
     case "CANCELLED":
       return Status.CANCELLED;
-    case 3:
+    case 4:
     case "PLACED":
       return Status.PLACED;
-    case 4:
+    case 5:
     case "EXPIRED":
       return Status.EXPIRED;
-    case 5:
+    case 6:
     case "PENDING":
       return Status.PENDING;
     case -1:
@@ -61,8 +60,10 @@ export function statusToJSON(object: Status): string {
   switch (object) {
     case Status.NOT_USED_STATUS:
       return "NOT_USED_STATUS";
-    case Status.EXECUTED:
-      return "EXECUTED";
+    case Status.PARTIALLY_FILLED:
+      return "PARTIALLY_FILLED";
+    case Status.FILLED:
+      return "FILLED";
     case Status.CANCELLED:
       return "CANCELLED";
     case Status.PLACED:

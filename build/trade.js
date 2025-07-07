@@ -15,16 +15,12 @@ export const protobufPackage = "trade";
 export var Status;
 (function (Status) {
     Status[Status["NOT_USED_STATUS"] = 0] = "NOT_USED_STATUS";
-    /** EXECUTED - The trade was executed */
-    Status[Status["EXECUTED"] = 1] = "EXECUTED";
-    /** CANCELLED - The trade was cancelled */
-    Status[Status["CANCELLED"] = 2] = "CANCELLED";
-    /** PLACED - The trade was placed but not yet executed */
-    Status[Status["PLACED"] = 3] = "PLACED";
-    /** EXPIRED - The trade was expired */
-    Status[Status["EXPIRED"] = 4] = "EXPIRED";
-    /** PENDING - The trade is pending execution */
-    Status[Status["PENDING"] = 5] = "PENDING";
+    Status[Status["PARTIALLY_FILLED"] = 1] = "PARTIALLY_FILLED";
+    Status[Status["FILLED"] = 2] = "FILLED";
+    Status[Status["CANCELLED"] = 3] = "CANCELLED";
+    Status[Status["PLACED"] = 4] = "PLACED";
+    Status[Status["EXPIRED"] = 5] = "EXPIRED";
+    Status[Status["PENDING"] = 6] = "PENDING";
     Status[Status["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(Status || (Status = {}));
 export function statusFromJSON(object) {
@@ -33,18 +29,21 @@ export function statusFromJSON(object) {
         case "NOT_USED_STATUS":
             return Status.NOT_USED_STATUS;
         case 1:
-        case "EXECUTED":
-            return Status.EXECUTED;
+        case "PARTIALLY_FILLED":
+            return Status.PARTIALLY_FILLED;
         case 2:
+        case "FILLED":
+            return Status.FILLED;
+        case 3:
         case "CANCELLED":
             return Status.CANCELLED;
-        case 3:
+        case 4:
         case "PLACED":
             return Status.PLACED;
-        case 4:
+        case 5:
         case "EXPIRED":
             return Status.EXPIRED;
-        case 5:
+        case 6:
         case "PENDING":
             return Status.PENDING;
         case -1:
@@ -57,8 +56,10 @@ export function statusToJSON(object) {
     switch (object) {
         case Status.NOT_USED_STATUS:
             return "NOT_USED_STATUS";
-        case Status.EXECUTED:
-            return "EXECUTED";
+        case Status.PARTIALLY_FILLED:
+            return "PARTIALLY_FILLED";
+        case Status.FILLED:
+            return "FILLED";
         case Status.CANCELLED:
             return "CANCELLED";
         case Status.PLACED:
