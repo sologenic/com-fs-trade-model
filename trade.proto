@@ -30,6 +30,10 @@ message Trade {
     bool Enriched = 33; // If the trade has been enriched with precision data
     bool Processed = 34; // Check if trade is processed into the OHLC
 
+    // This status field enables unified indexing in Elasticsearch, allowing the backend to return a single combined dataset of both trades(executed orders) and orders for user trade history, 
+    // eliminating the need for separate Trade and Order queries on the frontend. Therefore, this field is to be used only when creating indexes in Elasticsearch.
+    optional Status Status = 35;
+
     // USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
     optional float USD = 40; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
 
@@ -42,4 +46,13 @@ message Trade {
 message Trades {
     repeated Trade Trades = 1;
     optional int32 Offset = 2; // Offset for pagination
+}
+
+enum Status {
+    NOT_USED_STATUS = 0;
+    EXECUTED = 1; // The trade was executed
+    CANCELLED = 2; // The trade was cancelled
+    PLACED = 3; // The trade was placed but not yet executed
+    EXPIRED = 4; // The trade was expired
+    PENDING = 5; // The trade is pending execution
 }

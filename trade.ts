@@ -15,6 +15,68 @@ import { Side, sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/mod
 
 export const protobufPackage = "trade";
 
+export enum Status {
+  NOT_USED_STATUS = 0,
+  /** EXECUTED - The trade was executed */
+  EXECUTED = 1,
+  /** CANCELLED - The trade was cancelled */
+  CANCELLED = 2,
+  /** PLACED - The trade was placed but not yet executed */
+  PLACED = 3,
+  /** EXPIRED - The trade was expired */
+  EXPIRED = 4,
+  /** PENDING - The trade is pending execution */
+  PENDING = 5,
+  UNRECOGNIZED = -1,
+}
+
+export function statusFromJSON(object: any): Status {
+  switch (object) {
+    case 0:
+    case "NOT_USED_STATUS":
+      return Status.NOT_USED_STATUS;
+    case 1:
+    case "EXECUTED":
+      return Status.EXECUTED;
+    case 2:
+    case "CANCELLED":
+      return Status.CANCELLED;
+    case 3:
+    case "PLACED":
+      return Status.PLACED;
+    case 4:
+    case "EXPIRED":
+      return Status.EXPIRED;
+    case 5:
+    case "PENDING":
+      return Status.PENDING;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Status.UNRECOGNIZED;
+  }
+}
+
+export function statusToJSON(object: Status): string {
+  switch (object) {
+    case Status.NOT_USED_STATUS:
+      return "NOT_USED_STATUS";
+    case Status.EXECUTED:
+      return "EXECUTED";
+    case Status.CANCELLED:
+      return "CANCELLED";
+    case Status.PLACED:
+      return "PLACED";
+    case Status.EXPIRED:
+      return "EXPIRED";
+    case Status.PENDING:
+      return "PENDING";
+    case Status.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 /** Key in store is TXID-Sequence-Metadata.Network */
 export interface Trade {
   UserID: string;
@@ -45,6 +107,13 @@ export interface Trade {
   Enriched: boolean;
   /** Check if trade is processed into the OHLC */
   Processed: boolean;
+  /**
+   * This status field enables unified indexing in Elasticsearch, allowing the backend to return a single combined dataset of both trades(executed orders) and orders for user trade history,
+   * eliminating the need for separate Trade and Order queries on the frontend. Therefore, this field is to be used only when creating indexes in Elasticsearch.
+   */
+  Status?:
+    | Status
+    | undefined;
   /** USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc. */
   USD?:
     | number
@@ -80,6 +149,7 @@ function createBaseTrade(): Trade {
     BlockHeight: 0,
     Enriched: false,
     Processed: false,
+    Status: undefined,
     USD: undefined,
     Inverted: false,
   };
@@ -131,6 +201,9 @@ export const Trade = {
     }
     if (message.Processed !== false) {
       writer.uint32(272).bool(message.Processed);
+    }
+    if (message.Status !== undefined) {
+      writer.uint32(280).int32(message.Status);
     }
     if (message.USD !== undefined) {
       writer.uint32(325).float(message.USD);
@@ -253,6 +326,13 @@ export const Trade = {
 
           message.Processed = reader.bool();
           continue;
+        case 35:
+          if (tag !== 280) {
+            break;
+          }
+
+          message.Status = reader.int32() as any;
+          continue;
         case 40:
           if (tag !== 325) {
             break;
@@ -293,6 +373,7 @@ export const Trade = {
       BlockHeight: isSet(object.BlockHeight) ? globalThis.Number(object.BlockHeight) : 0,
       Enriched: isSet(object.Enriched) ? globalThis.Boolean(object.Enriched) : false,
       Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
+      Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
       USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
       Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
     };
@@ -345,6 +426,9 @@ export const Trade = {
     if (message.Processed !== false) {
       obj.Processed = message.Processed;
     }
+    if (message.Status !== undefined) {
+      obj.Status = statusToJSON(message.Status);
+    }
     if (message.USD !== undefined) {
       obj.USD = message.USD;
     }
@@ -382,6 +466,7 @@ export const Trade = {
     message.BlockHeight = object.BlockHeight ?? 0;
     message.Enriched = object.Enriched ?? false;
     message.Processed = object.Processed ?? false;
+    message.Status = object.Status ?? undefined;
     message.USD = object.USD ?? undefined;
     message.Inverted = object.Inverted ?? false;
     return message;

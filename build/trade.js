@@ -12,6 +12,66 @@ import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export const protobufPackage = "trade";
+export var Status;
+(function (Status) {
+    Status[Status["NOT_USED_STATUS"] = 0] = "NOT_USED_STATUS";
+    /** EXECUTED - The trade was executed */
+    Status[Status["EXECUTED"] = 1] = "EXECUTED";
+    /** CANCELLED - The trade was cancelled */
+    Status[Status["CANCELLED"] = 2] = "CANCELLED";
+    /** PLACED - The trade was placed but not yet executed */
+    Status[Status["PLACED"] = 3] = "PLACED";
+    /** EXPIRED - The trade was expired */
+    Status[Status["EXPIRED"] = 4] = "EXPIRED";
+    /** PENDING - The trade is pending execution */
+    Status[Status["PENDING"] = 5] = "PENDING";
+    Status[Status["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(Status || (Status = {}));
+export function statusFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "NOT_USED_STATUS":
+            return Status.NOT_USED_STATUS;
+        case 1:
+        case "EXECUTED":
+            return Status.EXECUTED;
+        case 2:
+        case "CANCELLED":
+            return Status.CANCELLED;
+        case 3:
+        case "PLACED":
+            return Status.PLACED;
+        case 4:
+        case "EXPIRED":
+            return Status.EXPIRED;
+        case 5:
+        case "PENDING":
+            return Status.PENDING;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return Status.UNRECOGNIZED;
+    }
+}
+export function statusToJSON(object) {
+    switch (object) {
+        case Status.NOT_USED_STATUS:
+            return "NOT_USED_STATUS";
+        case Status.EXECUTED:
+            return "EXECUTED";
+        case Status.CANCELLED:
+            return "CANCELLED";
+        case Status.PLACED:
+            return "PLACED";
+        case Status.EXPIRED:
+            return "EXPIRED";
+        case Status.PENDING:
+            return "PENDING";
+        case Status.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
 function createBaseTrade() {
     return {
         UserID: "",
@@ -29,6 +89,7 @@ function createBaseTrade() {
         BlockHeight: 0,
         Enriched: false,
         Processed: false,
+        Status: undefined,
         USD: undefined,
         Inverted: false,
     };
@@ -79,6 +140,9 @@ export const Trade = {
         }
         if (message.Processed !== false) {
             writer.uint32(272).bool(message.Processed);
+        }
+        if (message.Status !== undefined) {
+            writer.uint32(280).int32(message.Status);
         }
         if (message.USD !== undefined) {
             writer.uint32(325).float(message.USD);
@@ -185,6 +249,12 @@ export const Trade = {
                     }
                     message.Processed = reader.bool();
                     continue;
+                case 35:
+                    if (tag !== 280) {
+                        break;
+                    }
+                    message.Status = reader.int32();
+                    continue;
                 case 40:
                     if (tag !== 325) {
                         break;
@@ -222,6 +292,7 @@ export const Trade = {
             BlockHeight: isSet(object.BlockHeight) ? globalThis.Number(object.BlockHeight) : 0,
             Enriched: isSet(object.Enriched) ? globalThis.Boolean(object.Enriched) : false,
             Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
+            Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
             USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
             Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
         };
@@ -273,6 +344,9 @@ export const Trade = {
         if (message.Processed !== false) {
             obj.Processed = message.Processed;
         }
+        if (message.Status !== undefined) {
+            obj.Status = statusToJSON(message.Status);
+        }
         if (message.USD !== undefined) {
             obj.USD = message.USD;
         }
@@ -285,7 +359,7 @@ export const Trade = {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
         const message = createBaseTrade();
         message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
@@ -310,8 +384,9 @@ export const Trade = {
         message.BlockHeight = (_j = object.BlockHeight) !== null && _j !== void 0 ? _j : 0;
         message.Enriched = (_k = object.Enriched) !== null && _k !== void 0 ? _k : false;
         message.Processed = (_l = object.Processed) !== null && _l !== void 0 ? _l : false;
-        message.USD = (_m = object.USD) !== null && _m !== void 0 ? _m : undefined;
-        message.Inverted = (_o = object.Inverted) !== null && _o !== void 0 ? _o : false;
+        message.Status = (_m = object.Status) !== null && _m !== void 0 ? _m : undefined;
+        message.USD = (_o = object.USD) !== null && _o !== void 0 ? _o : undefined;
+        message.Inverted = (_p = object.Inverted) !== null && _p !== void 0 ? _p : false;
         return message;
     },
 };

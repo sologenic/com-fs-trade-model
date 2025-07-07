@@ -4,6 +4,22 @@ import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "trade";
+export declare enum Status {
+    NOT_USED_STATUS = 0,
+    /** EXECUTED - The trade was executed */
+    EXECUTED = 1,
+    /** CANCELLED - The trade was cancelled */
+    CANCELLED = 2,
+    /** PLACED - The trade was placed but not yet executed */
+    PLACED = 3,
+    /** EXPIRED - The trade was expired */
+    EXPIRED = 4,
+    /** PENDING - The trade is pending execution */
+    PENDING = 5,
+    UNRECOGNIZED = -1
+}
+export declare function statusFromJSON(object: any): Status;
+export declare function statusToJSON(object: Status): string;
 /** Key in store is TXID-Sequence-Metadata.Network */
 export interface Trade {
     UserID: string;
@@ -30,6 +46,11 @@ export interface Trade {
     Enriched: boolean;
     /** Check if trade is processed into the OHLC */
     Processed: boolean;
+    /**
+     * This status field enables unified indexing in Elasticsearch, allowing the backend to return a single combined dataset of both trades(executed orders) and orders for user trade history,
+     * eliminating the need for separate Trade and Order queries on the frontend. Therefore, this field is to be used only when creating indexes in Elasticsearch.
+     */
+    Status?: Status | undefined;
     /** USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc. */
     USD?: number | undefined;
     /**
@@ -91,6 +112,7 @@ export declare const Trade: {
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
         Processed?: boolean | undefined;
+        Status?: Status | undefined;
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & {
@@ -167,6 +189,7 @@ export declare const Trade: {
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
         Processed?: boolean | undefined;
+        Status?: Status | undefined;
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & { [K_6 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
@@ -212,6 +235,7 @@ export declare const Trade: {
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
         Processed?: boolean | undefined;
+        Status?: Status | undefined;
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & {
@@ -288,6 +312,7 @@ export declare const Trade: {
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
         Processed?: boolean | undefined;
+        Status?: Status | undefined;
         USD?: number | undefined;
         Inverted?: boolean | undefined;
     } & { [K_13 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
@@ -340,6 +365,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
@@ -387,6 +413,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
@@ -431,6 +458,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & {
@@ -507,6 +535,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
@@ -551,6 +580,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
@@ -599,6 +629,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
@@ -646,6 +677,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
@@ -690,6 +722,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & {
@@ -766,6 +799,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
@@ -810,6 +844,7 @@ export declare const Trades: {
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
             Processed?: boolean | undefined;
+            Status?: Status | undefined;
             USD?: number | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
