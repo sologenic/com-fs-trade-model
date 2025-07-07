@@ -10,18 +10,13 @@ import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.prot
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
 import "trade.proto";
+import "util.proto";
 
 service TradeService {
     rpc Get(ID) returns (Trade) {}
     rpc Upsert(Trade) returns (google.protobuf.Empty) {}
     rpc BatchUpsert(Trades) returns (google.protobuf.Empty) {}
     rpc List(Filter) returns (Trades) {}
-}
-
-message ID {
-    string TXID = 1;
-    string OrganizaionID = 2; // Organization ID for the trade
-    metadata.Network Network = 3;
 }
 
 // Ability to get all trade history views using the filter options
