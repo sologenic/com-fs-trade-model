@@ -8,11 +8,10 @@ import "google/protobuf/empty.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
 import "tradepair.proto";
-import "util.proto";
 
 service TradePairService {
     // TradePair
-    rpc Get(ID) returns (TradePair) {}
+    rpc Get(TradePairKey) returns (TradePair) {}
     rpc List(TradePairFilter) returns (TradePairs) {}
     rpc Upsert(TradePair) returns (google.protobuf.Empty) {}
 }
@@ -23,4 +22,12 @@ message TradePairFilter {
     optional denom.Denom Denom2 = 3;
     optional int32 Offset = 4;
     string OrganizationID = 5;
+}
+
+message TradePairKey {
+    string Symbol1 = 1; 
+    string Symbol2 = 2; 
+    string Issuer = 3; 
+    string OrganizationID = 4; 
+    metadata.Network Network = 5;
 }

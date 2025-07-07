@@ -30,7 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TradeServiceClient interface {
-	Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Trade, error)
+	Get(ctx context.Context, in *TradeKey, opts ...grpc.CallOption) (*Trade, error)
 	Upsert(ctx context.Context, in *Trade, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	BatchUpsert(ctx context.Context, in *Trades, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	List(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*Trades, error)
@@ -44,7 +44,7 @@ func NewTradeServiceClient(cc grpc.ClientConnInterface) TradeServiceClient {
 	return &tradeServiceClient{cc}
 }
 
-func (c *tradeServiceClient) Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Trade, error) {
+func (c *tradeServiceClient) Get(ctx context.Context, in *TradeKey, opts ...grpc.CallOption) (*Trade, error) {
 	out := new(Trade)
 	err := c.cc.Invoke(ctx, TradeService_Get_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -84,7 +84,7 @@ func (c *tradeServiceClient) List(ctx context.Context, in *Filter, opts ...grpc.
 // All implementations should embed UnimplementedTradeServiceServer
 // for forward compatibility
 type TradeServiceServer interface {
-	Get(context.Context, *ID) (*Trade, error)
+	Get(context.Context, *TradeKey) (*Trade, error)
 	Upsert(context.Context, *Trade) (*emptypb.Empty, error)
 	BatchUpsert(context.Context, *Trades) (*emptypb.Empty, error)
 	List(context.Context, *Filter) (*Trades, error)
@@ -94,7 +94,7 @@ type TradeServiceServer interface {
 type UnimplementedTradeServiceServer struct {
 }
 
-func (UnimplementedTradeServiceServer) Get(context.Context, *ID) (*Trade, error) {
+func (UnimplementedTradeServiceServer) Get(context.Context, *TradeKey) (*Trade, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedTradeServiceServer) Upsert(context.Context, *Trade) (*emptypb.Empty, error) {
@@ -119,7 +119,7 @@ func RegisterTradeServiceServer(s grpc.ServiceRegistrar, srv TradeServiceServer)
 }
 
 func _TradeService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
+	in := new(TradeKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func _TradeService_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 		FullMethod: TradeService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradeServiceServer).Get(ctx, req.(*ID))
+		return srv.(TradeServiceServer).Get(ctx, req.(*TradeKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }

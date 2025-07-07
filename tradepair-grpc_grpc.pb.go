@@ -30,7 +30,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TradePairServiceClient interface {
 	// TradePair
-	Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*TradePair, error)
+	Get(ctx context.Context, in *TradePairKey, opts ...grpc.CallOption) (*TradePair, error)
 	List(ctx context.Context, in *TradePairFilter, opts ...grpc.CallOption) (*TradePairs, error)
 	Upsert(ctx context.Context, in *TradePair, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -43,7 +43,7 @@ func NewTradePairServiceClient(cc grpc.ClientConnInterface) TradePairServiceClie
 	return &tradePairServiceClient{cc}
 }
 
-func (c *tradePairServiceClient) Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*TradePair, error) {
+func (c *tradePairServiceClient) Get(ctx context.Context, in *TradePairKey, opts ...grpc.CallOption) (*TradePair, error) {
 	out := new(TradePair)
 	err := c.cc.Invoke(ctx, TradePairService_Get_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -75,7 +75,7 @@ func (c *tradePairServiceClient) Upsert(ctx context.Context, in *TradePair, opts
 // for forward compatibility
 type TradePairServiceServer interface {
 	// TradePair
-	Get(context.Context, *ID) (*TradePair, error)
+	Get(context.Context, *TradePairKey) (*TradePair, error)
 	List(context.Context, *TradePairFilter) (*TradePairs, error)
 	Upsert(context.Context, *TradePair) (*emptypb.Empty, error)
 }
@@ -84,7 +84,7 @@ type TradePairServiceServer interface {
 type UnimplementedTradePairServiceServer struct {
 }
 
-func (UnimplementedTradePairServiceServer) Get(context.Context, *ID) (*TradePair, error) {
+func (UnimplementedTradePairServiceServer) Get(context.Context, *TradePairKey) (*TradePair, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 func (UnimplementedTradePairServiceServer) List(context.Context, *TradePairFilter) (*TradePairs, error) {
@@ -106,7 +106,7 @@ func RegisterTradePairServiceServer(s grpc.ServiceRegistrar, srv TradePairServic
 }
 
 func _TradePairService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
+	in := new(TradePairKey)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func _TradePairService_Get_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: TradePairService_Get_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TradePairServiceServer).Get(ctx, req.(*ID))
+		return srv.(TradePairServiceServer).Get(ctx, req.(*TradePairKey))
 	}
 	return interceptor(ctx, in, info, handler)
 }
