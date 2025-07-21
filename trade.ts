@@ -9,6 +9,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
+import { TradeType, tradeTypeFromJSON, tradeTypeToJSON } from "./sologenic/com-fs-order-model/broker";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { Side, sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -125,6 +126,10 @@ export interface Trade {
    * this flag only indicates that the denoms as seen in the record are not in the original order
    */
   Inverted: boolean;
+  /** The type of the trade, e.g. limit, market, etc. */
+  TradeType: TradeType;
+  /** The commission paid to the brokerage */
+  Commission?: Decimal | undefined;
 }
 
 export interface Trades {
@@ -153,6 +158,8 @@ function createBaseTrade(): Trade {
     Status: undefined,
     USD: undefined,
     Inverted: false,
+    TradeType: 0,
+    Commission: undefined,
   };
 }
 
@@ -211,6 +218,12 @@ export const Trade = {
     }
     if (message.Inverted !== false) {
       writer.uint32(400).bool(message.Inverted);
+    }
+    if (message.TradeType !== 0) {
+      writer.uint32(408).int32(message.TradeType);
+    }
+    if (message.Commission !== undefined) {
+      Decimal.encode(message.Commission, writer.uint32(418).fork()).ldelim();
     }
     return writer;
   },
@@ -348,6 +361,20 @@ export const Trade = {
 
           message.Inverted = reader.bool();
           continue;
+        case 51:
+          if (tag !== 408) {
+            break;
+          }
+
+          message.TradeType = reader.int32() as any;
+          continue;
+        case 52:
+          if (tag !== 418) {
+            break;
+          }
+
+          message.Commission = Decimal.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -377,6 +404,8 @@ export const Trade = {
       Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
       USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
       Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
+      TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
+      Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
     };
   },
 
@@ -436,6 +465,12 @@ export const Trade = {
     if (message.Inverted !== false) {
       obj.Inverted = message.Inverted;
     }
+    if (message.TradeType !== 0) {
+      obj.TradeType = tradeTypeToJSON(message.TradeType);
+    }
+    if (message.Commission !== undefined) {
+      obj.Commission = Decimal.toJSON(message.Commission);
+    }
     return obj;
   },
 
@@ -470,6 +505,10 @@ export const Trade = {
     message.Status = object.Status ?? undefined;
     message.USD = object.USD ?? undefined;
     message.Inverted = object.Inverted ?? false;
+    message.TradeType = object.TradeType ?? 0;
+    message.Commission = (object.Commission !== undefined && object.Commission !== null)
+      ? Decimal.fromPartial(object.Commission)
+      : undefined;
     return message;
   },
 };

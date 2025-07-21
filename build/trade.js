@@ -8,6 +8,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
+import { tradeTypeFromJSON, tradeTypeToJSON } from "./sologenic/com-fs-order-model/broker";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -93,6 +94,8 @@ function createBaseTrade() {
         Status: undefined,
         USD: undefined,
         Inverted: false,
+        TradeType: 0,
+        Commission: undefined,
     };
 }
 export const Trade = {
@@ -150,6 +153,12 @@ export const Trade = {
         }
         if (message.Inverted !== false) {
             writer.uint32(400).bool(message.Inverted);
+        }
+        if (message.TradeType !== 0) {
+            writer.uint32(408).int32(message.TradeType);
+        }
+        if (message.Commission !== undefined) {
+            Decimal.encode(message.Commission, writer.uint32(418).fork()).ldelim();
         }
         return writer;
     },
@@ -268,6 +277,18 @@ export const Trade = {
                     }
                     message.Inverted = reader.bool();
                     continue;
+                case 51:
+                    if (tag !== 408) {
+                        break;
+                    }
+                    message.TradeType = reader.int32();
+                    continue;
+                case 52:
+                    if (tag !== 418) {
+                        break;
+                    }
+                    message.Commission = Decimal.decode(reader, reader.uint32());
+                    continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
                 break;
@@ -296,6 +317,8 @@ export const Trade = {
             Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
             USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
             Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
+            TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
+            Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
         };
     },
     toJSON(message) {
@@ -354,13 +377,19 @@ export const Trade = {
         if (message.Inverted !== false) {
             obj.Inverted = message.Inverted;
         }
+        if (message.TradeType !== 0) {
+            obj.TradeType = tradeTypeToJSON(message.TradeType);
+        }
+        if (message.Commission !== undefined) {
+            obj.Commission = Decimal.toJSON(message.Commission);
+        }
         return obj;
     },
     create(base) {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
         const message = createBaseTrade();
         message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
@@ -388,6 +417,10 @@ export const Trade = {
         message.Status = (_m = object.Status) !== null && _m !== void 0 ? _m : undefined;
         message.USD = (_o = object.USD) !== null && _o !== void 0 ? _o : undefined;
         message.Inverted = (_p = object.Inverted) !== null && _p !== void 0 ? _p : false;
+        message.TradeType = (_q = object.TradeType) !== null && _q !== void 0 ? _q : 0;
+        message.Commission = (object.Commission !== undefined && object.Commission !== null)
+            ? Decimal.fromPartial(object.Commission)
+            : undefined;
         return message;
     },
 };

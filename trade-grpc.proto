@@ -32,6 +32,7 @@ message Filter {
     optional int32 Offset = 10;
     optional orderproperties.Side Side = 11;
     string OrganizationID = 12;
+    optional string UserID = 13; // User ID for the trade
 }
 
 message TradeKey {
