@@ -36,10 +36,11 @@ message Filter {
     optional string UserID = 13; // User ID for the trade
     optional order.TradeType TradeType = 14; // The type of the trade, e.g. limit, market, etc.
     optional order.TimeInForce TimeInForce = 15; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+    optional int32 Limit = 16; // Limit for pagination
 }
 
 message TradeKey { // No need for network, included in the OrderKey
     string OrderKey = 1; // Datastore key: OrderID-SmartContractAddr-Network
     int64 Sequence = 2; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
-    string OrganizaionID = 3; // Organization ID for the trade
+    string OrganizationID = 3; // Organization ID for the trade
 }
