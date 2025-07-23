@@ -9,6 +9,14 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
+import {
+  TimeInForce,
+  timeInForceFromJSON,
+  timeInForceToJSON,
+  TradeType,
+  tradeTypeFromJSON,
+  tradeTypeToJSON,
+} from "./sologenic/com-fs-order-model/broker";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { Side, sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -119,6 +127,14 @@ export interface Trade {
   USD?:
     | number
     | undefined;
+  /** The type of the trade, e.g. limit, market, etc. */
+  TradeType: TradeType;
+  /** The commission paid to the brokerage */
+  Commission?:
+    | number
+    | undefined;
+  /** The time in force for the trade, e.g. GTC, IOC, FOK, etc. */
+  TimeInForce: TimeInForce;
   /**
    * Trades get stored in alphabetical order of the denom pair.
    * Data is "uninverted" on retrieval and
@@ -152,6 +168,9 @@ function createBaseTrade(): Trade {
     Processed: false,
     Status: undefined,
     USD: undefined,
+    TradeType: 0,
+    Commission: undefined,
+    TimeInForce: 0,
     Inverted: false,
   };
 }
@@ -208,6 +227,15 @@ export const Trade = {
     }
     if (message.USD !== undefined) {
       writer.uint32(325).float(message.USD);
+    }
+    if (message.TradeType !== 0) {
+      writer.uint32(328).int32(message.TradeType);
+    }
+    if (message.Commission !== undefined) {
+      writer.uint32(337).double(message.Commission);
+    }
+    if (message.TimeInForce !== 0) {
+      writer.uint32(344).int32(message.TimeInForce);
     }
     if (message.Inverted !== false) {
       writer.uint32(400).bool(message.Inverted);
@@ -341,6 +369,27 @@ export const Trade = {
 
           message.USD = reader.float();
           continue;
+        case 41:
+          if (tag !== 328) {
+            break;
+          }
+
+          message.TradeType = reader.int32() as any;
+          continue;
+        case 42:
+          if (tag !== 337) {
+            break;
+          }
+
+          message.Commission = reader.double();
+          continue;
+        case 43:
+          if (tag !== 344) {
+            break;
+          }
+
+          message.TimeInForce = reader.int32() as any;
+          continue;
         case 50:
           if (tag !== 400) {
             break;
@@ -376,6 +425,9 @@ export const Trade = {
       Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
       Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
       USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
+      TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
+      Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
+      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
       Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
     };
   },
@@ -433,6 +485,15 @@ export const Trade = {
     if (message.USD !== undefined) {
       obj.USD = message.USD;
     }
+    if (message.TradeType !== 0) {
+      obj.TradeType = tradeTypeToJSON(message.TradeType);
+    }
+    if (message.Commission !== undefined) {
+      obj.Commission = message.Commission;
+    }
+    if (message.TimeInForce !== 0) {
+      obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
+    }
     if (message.Inverted !== false) {
       obj.Inverted = message.Inverted;
     }
@@ -469,6 +530,9 @@ export const Trade = {
     message.Processed = object.Processed ?? false;
     message.Status = object.Status ?? undefined;
     message.USD = object.USD ?? undefined;
+    message.TradeType = object.TradeType ?? 0;
+    message.Commission = object.Commission ?? undefined;
+    message.TimeInForce = object.TimeInForce ?? 0;
     message.Inverted = object.Inverted ?? false;
     return message;
   },

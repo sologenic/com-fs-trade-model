@@ -1,5 +1,6 @@
 import _m0 from "protobufjs/minimal";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
+import { TimeInForce, TradeType } from "./sologenic/com-fs-order-model/broker";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -49,6 +50,12 @@ export interface Trade {
     Status?: Status | undefined;
     /** USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc. */
     USD?: number | undefined;
+    /** The type of the trade, e.g. limit, market, etc. */
+    TradeType: TradeType;
+    /** The commission paid to the brokerage */
+    Commission?: number | undefined;
+    /** The time in force for the trade, e.g. GTC, IOC, FOK, etc. */
+    TimeInForce: TimeInForce;
     /**
      * Trades get stored in alphabetical order of the denom pair.
      * Data is "uninverted" on retrieval and
@@ -110,6 +117,9 @@ export declare const Trade: {
         Processed?: boolean | undefined;
         Status?: Status | undefined;
         USD?: number | undefined;
+        TradeType?: TradeType | undefined;
+        Commission?: number | undefined;
+        TimeInForce?: TimeInForce | undefined;
         Inverted?: boolean | undefined;
     } & {
         UserID?: string | undefined;
@@ -187,6 +197,9 @@ export declare const Trade: {
         Processed?: boolean | undefined;
         Status?: Status | undefined;
         USD?: number | undefined;
+        TradeType?: TradeType | undefined;
+        Commission?: number | undefined;
+        TimeInForce?: TimeInForce | undefined;
         Inverted?: boolean | undefined;
     } & { [K_6 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
     fromPartial<I_1 extends {
@@ -233,6 +246,9 @@ export declare const Trade: {
         Processed?: boolean | undefined;
         Status?: Status | undefined;
         USD?: number | undefined;
+        TradeType?: TradeType | undefined;
+        Commission?: number | undefined;
+        TimeInForce?: TimeInForce | undefined;
         Inverted?: boolean | undefined;
     } & {
         UserID?: string | undefined;
@@ -310,6 +326,9 @@ export declare const Trade: {
         Processed?: boolean | undefined;
         Status?: Status | undefined;
         USD?: number | undefined;
+        TradeType?: TradeType | undefined;
+        Commission?: number | undefined;
+        TimeInForce?: TimeInForce | undefined;
         Inverted?: boolean | undefined;
     } & { [K_13 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
 };
@@ -363,6 +382,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
         Offset?: number | undefined;
@@ -411,6 +433,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
             UserID?: string | undefined;
@@ -456,6 +481,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         } & {
             UserID?: string | undefined;
@@ -533,6 +561,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
             UserID?: string | undefined;
@@ -578,6 +609,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
@@ -627,6 +661,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[] | undefined;
         Offset?: number | undefined;
@@ -675,6 +712,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[] & ({
             UserID?: string | undefined;
@@ -720,6 +760,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         } & {
             UserID?: string | undefined;
@@ -797,6 +840,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
             UserID?: string | undefined;
@@ -842,6 +888,9 @@ export declare const Trades: {
             Processed?: boolean | undefined;
             Status?: Status | undefined;
             USD?: number | undefined;
+            TradeType?: TradeType | undefined;
+            Commission?: number | undefined;
+            TimeInForce?: TimeInForce | undefined;
             Inverted?: boolean | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
