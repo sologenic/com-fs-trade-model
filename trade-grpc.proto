@@ -38,8 +38,8 @@ message Filter {
     optional int32 Limit = 15; // Limit for pagination
 }
 
-message TradeKey { // No need for network, included in the OrderKey
-    string OrderKey = 1; // Datastore key: OrderID-SmartContractAddr-Network
-    int64 Sequence = 2; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
-    string OrganizationID = 3; // Organization ID for the trade
+message TradeKey {
+    string TXID = 1; // Transaction hash for the trade
+    string OrganizationID = 2;
+    metadata.Network Network = 3;
 }
