@@ -24,19 +24,18 @@ message Filter {
     metadata.Network Network = 1;
     optional google.protobuf.Timestamp From = 2;
     optional google.protobuf.Timestamp To = 3;
-    optional string Wallet = 4; // Wallet address
-    optional int64 Sequence = 5;
-    optional string OrderKey = 6; // Datastore key
-    optional string TXID = 7;
-    optional denom.Denom Denom1 = 8;
-    optional denom.Denom Denom2 = 9;
-    optional int32 Offset = 10;
-    optional orderproperties.Side Side = 11;
-    string OrganizationID = 12;
-    optional string UserID = 13; // User ID for the trade
-    optional order.TradeType TradeType = 14; // The type of the trade, e.g. limit, market, etc.
-    optional order.TimeInForce TimeInForce = 15; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
-    optional int32 Limit = 16; // Limit for pagination
+    optional int64 Sequence = 4;
+    optional string OrderKey = 5; // Datastore key
+    optional string TXID = 6;
+    optional denom.Denom Denom1 = 7;
+    optional denom.Denom Denom2 = 8;
+    optional int32 Offset = 9;
+    optional orderproperties.Side Side = 10;
+    string OrganizationID = 11;
+    optional string UserID = 12; // User ID for the trade
+    optional order.TradeType TradeType = 13; // The type of the trade, e.g. limit, market, etc.
+    optional order.TimeInForce TimeInForce = 14; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+    optional int32 Limit = 15; // Limit for pagination
 }
 
 message TradeKey { // No need for network, included in the OrderKey
