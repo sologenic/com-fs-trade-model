@@ -8,7 +8,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
-import { tradeTypeFromJSON, tradeTypeToJSON } from "./sologenic/com-fs-order-model/broker";
+import { timeInForceFromJSON, timeInForceToJSON, tradeTypeFromJSON, tradeTypeToJSON, } from "./sologenic/com-fs-order-model/broker";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -93,9 +93,10 @@ function createBaseTrade() {
         Processed: false,
         Status: undefined,
         USD: undefined,
-        Inverted: false,
         TradeType: 0,
         Commission: undefined,
+        TimeInForce: 0,
+        Inverted: false,
     };
 }
 export const Trade = {
@@ -151,14 +152,17 @@ export const Trade = {
         if (message.USD !== undefined) {
             writer.uint32(325).float(message.USD);
         }
-        if (message.Inverted !== false) {
-            writer.uint32(400).bool(message.Inverted);
-        }
         if (message.TradeType !== 0) {
-            writer.uint32(408).int32(message.TradeType);
+            writer.uint32(328).int32(message.TradeType);
         }
         if (message.Commission !== undefined) {
-            Decimal.encode(message.Commission, writer.uint32(418).fork()).ldelim();
+            writer.uint32(337).double(message.Commission);
+        }
+        if (message.TimeInForce !== 0) {
+            writer.uint32(344).int32(message.TimeInForce);
+        }
+        if (message.Inverted !== false) {
+            writer.uint32(400).bool(message.Inverted);
         }
         return writer;
     },
@@ -271,23 +275,29 @@ export const Trade = {
                     }
                     message.USD = reader.float();
                     continue;
+                case 41:
+                    if (tag !== 328) {
+                        break;
+                    }
+                    message.TradeType = reader.int32();
+                    continue;
+                case 42:
+                    if (tag !== 337) {
+                        break;
+                    }
+                    message.Commission = reader.double();
+                    continue;
+                case 43:
+                    if (tag !== 344) {
+                        break;
+                    }
+                    message.TimeInForce = reader.int32();
+                    continue;
                 case 50:
                     if (tag !== 400) {
                         break;
                     }
                     message.Inverted = reader.bool();
-                    continue;
-                case 51:
-                    if (tag !== 408) {
-                        break;
-                    }
-                    message.TradeType = reader.int32();
-                    continue;
-                case 52:
-                    if (tag !== 418) {
-                        break;
-                    }
-                    message.Commission = Decimal.decode(reader, reader.uint32());
                     continue;
             }
             if ((tag & 7) === 4 || tag === 0) {
@@ -316,9 +326,10 @@ export const Trade = {
             Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
             Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
             USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
-            Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
             TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
-            Commission: isSet(object.Commission) ? Decimal.fromJSON(object.Commission) : undefined,
+            Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
+            TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+            Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
         };
     },
     toJSON(message) {
@@ -374,14 +385,17 @@ export const Trade = {
         if (message.USD !== undefined) {
             obj.USD = message.USD;
         }
-        if (message.Inverted !== false) {
-            obj.Inverted = message.Inverted;
-        }
         if (message.TradeType !== 0) {
             obj.TradeType = tradeTypeToJSON(message.TradeType);
         }
         if (message.Commission !== undefined) {
-            obj.Commission = Decimal.toJSON(message.Commission);
+            obj.Commission = message.Commission;
+        }
+        if (message.TimeInForce !== 0) {
+            obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
+        }
+        if (message.Inverted !== false) {
+            obj.Inverted = message.Inverted;
         }
         return obj;
     },
@@ -389,7 +403,7 @@ export const Trade = {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
         const message = createBaseTrade();
         message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
@@ -416,11 +430,10 @@ export const Trade = {
         message.Processed = (_l = object.Processed) !== null && _l !== void 0 ? _l : false;
         message.Status = (_m = object.Status) !== null && _m !== void 0 ? _m : undefined;
         message.USD = (_o = object.USD) !== null && _o !== void 0 ? _o : undefined;
-        message.Inverted = (_p = object.Inverted) !== null && _p !== void 0 ? _p : false;
-        message.TradeType = (_q = object.TradeType) !== null && _q !== void 0 ? _q : 0;
-        message.Commission = (object.Commission !== undefined && object.Commission !== null)
-            ? Decimal.fromPartial(object.Commission)
-            : undefined;
+        message.TradeType = (_p = object.TradeType) !== null && _p !== void 0 ? _p : 0;
+        message.Commission = (_q = object.Commission) !== null && _q !== void 0 ? _q : undefined;
+        message.TimeInForce = (_r = object.TimeInForce) !== null && _r !== void 0 ? _r : 0;
+        message.Inverted = (_s = object.Inverted) !== null && _s !== void 0 ? _s : false;
         return message;
     },
 };

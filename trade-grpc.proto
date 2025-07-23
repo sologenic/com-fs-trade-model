@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
+import "sologenic/com-fs-order-model/broker.proto";
 import "trade.proto";
 
 service TradeService {
@@ -33,10 +34,12 @@ message Filter {
     optional orderproperties.Side Side = 11;
     string OrganizationID = 12;
     optional string UserID = 13; // User ID for the trade
+    optional order.TradeType TradeType = 14; // The type of the trade, e.g. limit, market, etc.
+    optional order.TimeInForce TimeInForce = 15; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 }
 
-message TradeKey {
-    string TXID = 1;
-    string OrganizaionID = 2; // Organization ID for the trade
-    metadata.Network Network = 3;
+message TradeKey { // No need for network, included in the OrderKey
+    string OrderKey = 1; // Datastore key: OrderID-SmartContractAddr-Network
+    int64 Sequence = 2; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
+    string OrganizaionID = 3; // Organization ID for the trade
 }

@@ -38,13 +38,14 @@ message Trade {
     // USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
     optional float USD = 40; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
 
+    order.TradeType TradeType = 41; // The type of the trade, e.g. limit, market, etc.
+    optional double Commission = 42; // The commission paid to the brokerage
+    order.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+
     // Trades get stored in alphabetical order of the denom pair. 
     // Data is "uninverted" on retrieval and 
     // this flag only indicates that the denoms as seen in the record are not in the original order
     bool Inverted = 50;
-
-    order.TradeType TradeType = 51; // The type of the trade, e.g. limit, market, etc.
-    optional decimal.Decimal Commission = 52; // The commission paid to the brokerage
 }
 
 message Trades {
