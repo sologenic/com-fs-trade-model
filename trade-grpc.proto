@@ -36,6 +36,9 @@ message Filter {
     optional order.TradeType TradeType = 13; // The type of the trade, e.g. limit, market, etc.
     optional order.TimeInForce TimeInForce = 14; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
     optional int32 Limit = 15; // Limit for pagination
+    // Use for batch queries (with IN operator) instead of Denom1/Denom2
+    repeated string Denom1Symbols = 16; // List of Denom1 symbols to filter trades
+    repeated string Denom2Symbols = 17; // List of Denom2 symbols to filter trades
 }
 
 message TradeKey {
