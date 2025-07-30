@@ -23,6 +23,82 @@ import { Side, sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/mod
 
 export const protobufPackage = "trade";
 
+export enum ActivityType {
+  NOT_USED_ACTIVITY_TYPE = 0,
+  /** DEPOSIT - Deposit of funds to an account */
+  DEPOSIT = 1,
+  /** WITHDRAWAL - Withdrawal of funds from an account */
+  WITHDRAWAL = 2,
+  /** DIVIDEND - Dividend payment to an account */
+  DIVIDEND = 3,
+  /** INTEREST - Interest payment to an account */
+  INTEREST = 4,
+  /** RECEIVED - Received funds from another account */
+  RECEIVED = 5,
+  /** SENT - Sent funds from this account to another account */
+  SENT = 6,
+  /** SUBSCRIPTION - Subscription to a service or product */
+  SUBSCRIPTION = 7,
+  UNRECOGNIZED = -1,
+}
+
+export function activityTypeFromJSON(object: any): ActivityType {
+  switch (object) {
+    case 0:
+    case "NOT_USED_ACTIVITY_TYPE":
+      return ActivityType.NOT_USED_ACTIVITY_TYPE;
+    case 1:
+    case "DEPOSIT":
+      return ActivityType.DEPOSIT;
+    case 2:
+    case "WITHDRAWAL":
+      return ActivityType.WITHDRAWAL;
+    case 3:
+    case "DIVIDEND":
+      return ActivityType.DIVIDEND;
+    case 4:
+    case "INTEREST":
+      return ActivityType.INTEREST;
+    case 5:
+    case "RECEIVED":
+      return ActivityType.RECEIVED;
+    case 6:
+    case "SENT":
+      return ActivityType.SENT;
+    case 7:
+    case "SUBSCRIPTION":
+      return ActivityType.SUBSCRIPTION;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return ActivityType.UNRECOGNIZED;
+  }
+}
+
+export function activityTypeToJSON(object: ActivityType): string {
+  switch (object) {
+    case ActivityType.NOT_USED_ACTIVITY_TYPE:
+      return "NOT_USED_ACTIVITY_TYPE";
+    case ActivityType.DEPOSIT:
+      return "DEPOSIT";
+    case ActivityType.WITHDRAWAL:
+      return "WITHDRAWAL";
+    case ActivityType.DIVIDEND:
+      return "DIVIDEND";
+    case ActivityType.INTEREST:
+      return "INTEREST";
+    case ActivityType.RECEIVED:
+      return "RECEIVED";
+    case ActivityType.SENT:
+      return "SENT";
+    case ActivityType.SUBSCRIPTION:
+      return "SUBSCRIPTION";
+    case ActivityType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export enum Status {
   NOT_USED_STATUS = 0,
   PARTIALLY_FILLED = 1,
@@ -136,6 +212,13 @@ export interface Trade {
   /** The time in force for the trade, e.g. GTC, IOC, FOK, etc. */
   TimeInForce: TimeInForce;
   /**
+   * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
+   * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
+   */
+  ActivityType?:
+    | ActivityType
+    | undefined;
+  /**
    * Trades get stored in alphabetical order of the denom pair.
    * Data is "uninverted" on retrieval and
    * this flag only indicates that the denoms as seen in the record are not in the original order
@@ -171,6 +254,7 @@ function createBaseTrade(): Trade {
     TradeType: 0,
     Commission: undefined,
     TimeInForce: 0,
+    ActivityType: undefined,
     Inverted: false,
   };
 }
@@ -236,6 +320,9 @@ export const Trade = {
     }
     if (message.TimeInForce !== 0) {
       writer.uint32(344).int32(message.TimeInForce);
+    }
+    if (message.ActivityType !== undefined) {
+      writer.uint32(352).int32(message.ActivityType);
     }
     if (message.Inverted !== false) {
       writer.uint32(400).bool(message.Inverted);
@@ -390,6 +477,13 @@ export const Trade = {
 
           message.TimeInForce = reader.int32() as any;
           continue;
+        case 44:
+          if (tag !== 352) {
+            break;
+          }
+
+          message.ActivityType = reader.int32() as any;
+          continue;
         case 50:
           if (tag !== 400) {
             break;
@@ -428,6 +522,7 @@ export const Trade = {
       TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
       Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
       TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+      ActivityType: isSet(object.ActivityType) ? activityTypeFromJSON(object.ActivityType) : undefined,
       Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
     };
   },
@@ -494,6 +589,9 @@ export const Trade = {
     if (message.TimeInForce !== 0) {
       obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
     }
+    if (message.ActivityType !== undefined) {
+      obj.ActivityType = activityTypeToJSON(message.ActivityType);
+    }
     if (message.Inverted !== false) {
       obj.Inverted = message.Inverted;
     }
@@ -533,6 +631,7 @@ export const Trade = {
     message.TradeType = object.TradeType ?? 0;
     message.Commission = object.Commission ?? undefined;
     message.TimeInForce = object.TimeInForce ?? 0;
+    message.ActivityType = object.ActivityType ?? undefined;
     message.Inverted = object.Inverted ?? false;
     return message;
   },

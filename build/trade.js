@@ -13,6 +13,80 @@ import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export const protobufPackage = "trade";
+export var ActivityType;
+(function (ActivityType) {
+    ActivityType[ActivityType["NOT_USED_ACTIVITY_TYPE"] = 0] = "NOT_USED_ACTIVITY_TYPE";
+    /** DEPOSIT - Deposit of funds to an account */
+    ActivityType[ActivityType["DEPOSIT"] = 1] = "DEPOSIT";
+    /** WITHDRAWAL - Withdrawal of funds from an account */
+    ActivityType[ActivityType["WITHDRAWAL"] = 2] = "WITHDRAWAL";
+    /** DIVIDEND - Dividend payment to an account */
+    ActivityType[ActivityType["DIVIDEND"] = 3] = "DIVIDEND";
+    /** INTEREST - Interest payment to an account */
+    ActivityType[ActivityType["INTEREST"] = 4] = "INTEREST";
+    /** RECEIVED - Received funds from another account */
+    ActivityType[ActivityType["RECEIVED"] = 5] = "RECEIVED";
+    /** SENT - Sent funds from this account to another account */
+    ActivityType[ActivityType["SENT"] = 6] = "SENT";
+    /** SUBSCRIPTION - Subscription to a service or product */
+    ActivityType[ActivityType["SUBSCRIPTION"] = 7] = "SUBSCRIPTION";
+    ActivityType[ActivityType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
+})(ActivityType || (ActivityType = {}));
+export function activityTypeFromJSON(object) {
+    switch (object) {
+        case 0:
+        case "NOT_USED_ACTIVITY_TYPE":
+            return ActivityType.NOT_USED_ACTIVITY_TYPE;
+        case 1:
+        case "DEPOSIT":
+            return ActivityType.DEPOSIT;
+        case 2:
+        case "WITHDRAWAL":
+            return ActivityType.WITHDRAWAL;
+        case 3:
+        case "DIVIDEND":
+            return ActivityType.DIVIDEND;
+        case 4:
+        case "INTEREST":
+            return ActivityType.INTEREST;
+        case 5:
+        case "RECEIVED":
+            return ActivityType.RECEIVED;
+        case 6:
+        case "SENT":
+            return ActivityType.SENT;
+        case 7:
+        case "SUBSCRIPTION":
+            return ActivityType.SUBSCRIPTION;
+        case -1:
+        case "UNRECOGNIZED":
+        default:
+            return ActivityType.UNRECOGNIZED;
+    }
+}
+export function activityTypeToJSON(object) {
+    switch (object) {
+        case ActivityType.NOT_USED_ACTIVITY_TYPE:
+            return "NOT_USED_ACTIVITY_TYPE";
+        case ActivityType.DEPOSIT:
+            return "DEPOSIT";
+        case ActivityType.WITHDRAWAL:
+            return "WITHDRAWAL";
+        case ActivityType.DIVIDEND:
+            return "DIVIDEND";
+        case ActivityType.INTEREST:
+            return "INTEREST";
+        case ActivityType.RECEIVED:
+            return "RECEIVED";
+        case ActivityType.SENT:
+            return "SENT";
+        case ActivityType.SUBSCRIPTION:
+            return "SUBSCRIPTION";
+        case ActivityType.UNRECOGNIZED:
+        default:
+            return "UNRECOGNIZED";
+    }
+}
 export var Status;
 (function (Status) {
     Status[Status["NOT_USED_STATUS"] = 0] = "NOT_USED_STATUS";
@@ -96,6 +170,7 @@ function createBaseTrade() {
         TradeType: 0,
         Commission: undefined,
         TimeInForce: 0,
+        ActivityType: undefined,
         Inverted: false,
     };
 }
@@ -160,6 +235,9 @@ export const Trade = {
         }
         if (message.TimeInForce !== 0) {
             writer.uint32(344).int32(message.TimeInForce);
+        }
+        if (message.ActivityType !== undefined) {
+            writer.uint32(352).int32(message.ActivityType);
         }
         if (message.Inverted !== false) {
             writer.uint32(400).bool(message.Inverted);
@@ -293,6 +371,12 @@ export const Trade = {
                     }
                     message.TimeInForce = reader.int32();
                     continue;
+                case 44:
+                    if (tag !== 352) {
+                        break;
+                    }
+                    message.ActivityType = reader.int32();
+                    continue;
                 case 50:
                     if (tag !== 400) {
                         break;
@@ -329,6 +413,7 @@ export const Trade = {
             TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
             Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
             TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+            ActivityType: isSet(object.ActivityType) ? activityTypeFromJSON(object.ActivityType) : undefined,
             Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
         };
     },
@@ -394,6 +479,9 @@ export const Trade = {
         if (message.TimeInForce !== 0) {
             obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
         }
+        if (message.ActivityType !== undefined) {
+            obj.ActivityType = activityTypeToJSON(message.ActivityType);
+        }
         if (message.Inverted !== false) {
             obj.Inverted = message.Inverted;
         }
@@ -403,7 +491,7 @@ export const Trade = {
         return Trade.fromPartial(base !== null && base !== void 0 ? base : {});
     },
     fromPartial(object) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
         const message = createBaseTrade();
         message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
         message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
@@ -433,7 +521,8 @@ export const Trade = {
         message.TradeType = (_p = object.TradeType) !== null && _p !== void 0 ? _p : 0;
         message.Commission = (_q = object.Commission) !== null && _q !== void 0 ? _q : undefined;
         message.TimeInForce = (_r = object.TimeInForce) !== null && _r !== void 0 ? _r : 0;
-        message.Inverted = (_s = object.Inverted) !== null && _s !== void 0 ? _s : false;
+        message.ActivityType = (_s = object.ActivityType) !== null && _s !== void 0 ? _s : undefined;
+        message.Inverted = (_t = object.Inverted) !== null && _t !== void 0 ? _t : false;
         return message;
     },
 };
