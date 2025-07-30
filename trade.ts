@@ -35,8 +35,8 @@ export enum ActivityType {
   INTEREST = 4,
   /** RECEIVED - Received funds from another account */
   RECEIVED = 5,
-  /** TRANSFER - Transfer of funds between accounts */
-  TRANSFER = 6,
+  /** SENT - Sent funds from this account to another account */
+  SENT = 6,
   /** SUBSCRIPTION - Subscription to a service or product */
   SUBSCRIPTION = 7,
   UNRECOGNIZED = -1,
@@ -63,8 +63,8 @@ export function activityTypeFromJSON(object: any): ActivityType {
     case "RECEIVED":
       return ActivityType.RECEIVED;
     case 6:
-    case "TRANSFER":
-      return ActivityType.TRANSFER;
+    case "SENT":
+      return ActivityType.SENT;
     case 7:
     case "SUBSCRIPTION":
       return ActivityType.SUBSCRIPTION;
@@ -89,8 +89,8 @@ export function activityTypeToJSON(object: ActivityType): string {
       return "INTEREST";
     case ActivityType.RECEIVED:
       return "RECEIVED";
-    case ActivityType.TRANSFER:
-      return "TRANSFER";
+    case ActivityType.SENT:
+      return "SENT";
     case ActivityType.SUBSCRIPTION:
       return "SUBSCRIPTION";
     case ActivityType.UNRECOGNIZED:
@@ -213,7 +213,7 @@ export interface Trade {
   TimeInForce: TimeInForce;
   /**
    * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-   * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, transfers) as "sell"
+   * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
    */
   ActivityType?:
     | ActivityType

@@ -17,8 +17,8 @@ export declare enum ActivityType {
     INTEREST = 4,
     /** RECEIVED - Received funds from another account */
     RECEIVED = 5,
-    /** TRANSFER - Transfer of funds between accounts */
-    TRANSFER = 6,
+    /** SENT - Sent funds from this account to another account */
+    SENT = 6,
     /** SUBSCRIPTION - Subscription to a service or product */
     SUBSCRIPTION = 7,
     UNRECOGNIZED = -1
@@ -78,7 +78,7 @@ export interface Trade {
     TimeInForce: TimeInForce;
     /**
      * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-     * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, transfers) as "sell"
+     * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
      */
     ActivityType?: ActivityType | undefined;
     /**

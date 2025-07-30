@@ -26,8 +26,8 @@ export var ActivityType;
     ActivityType[ActivityType["INTEREST"] = 4] = "INTEREST";
     /** RECEIVED - Received funds from another account */
     ActivityType[ActivityType["RECEIVED"] = 5] = "RECEIVED";
-    /** TRANSFER - Transfer of funds between accounts */
-    ActivityType[ActivityType["TRANSFER"] = 6] = "TRANSFER";
+    /** SENT - Sent funds from this account to another account */
+    ActivityType[ActivityType["SENT"] = 6] = "SENT";
     /** SUBSCRIPTION - Subscription to a service or product */
     ActivityType[ActivityType["SUBSCRIPTION"] = 7] = "SUBSCRIPTION";
     ActivityType[ActivityType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
@@ -53,8 +53,8 @@ export function activityTypeFromJSON(object) {
         case "RECEIVED":
             return ActivityType.RECEIVED;
         case 6:
-        case "TRANSFER":
-            return ActivityType.TRANSFER;
+        case "SENT":
+            return ActivityType.SENT;
         case 7:
         case "SUBSCRIPTION":
             return ActivityType.SUBSCRIPTION;
@@ -78,8 +78,8 @@ export function activityTypeToJSON(object) {
             return "INTEREST";
         case ActivityType.RECEIVED:
             return "RECEIVED";
-        case ActivityType.TRANSFER:
-            return "TRANSFER";
+        case ActivityType.SENT:
+            return "SENT";
         case ActivityType.SUBSCRIPTION:
             return "SUBSCRIPTION";
         case ActivityType.UNRECOGNIZED:
