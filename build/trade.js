@@ -16,20 +16,22 @@ export const protobufPackage = "trade";
 export var ActivityType;
 (function (ActivityType) {
     ActivityType[ActivityType["NOT_USED_ACTIVITY_TYPE"] = 0] = "NOT_USED_ACTIVITY_TYPE";
+    /** ORDER - Order related: buy, sell, cancel */
+    ActivityType[ActivityType["ORDER"] = 1] = "ORDER";
     /** DEPOSIT - Deposit of funds to an account */
-    ActivityType[ActivityType["DEPOSIT"] = 1] = "DEPOSIT";
+    ActivityType[ActivityType["DEPOSIT"] = 2] = "DEPOSIT";
     /** WITHDRAWAL - Withdrawal of funds from an account */
-    ActivityType[ActivityType["WITHDRAWAL"] = 2] = "WITHDRAWAL";
+    ActivityType[ActivityType["WITHDRAWAL"] = 3] = "WITHDRAWAL";
     /** DIVIDEND - Dividend payment to an account */
-    ActivityType[ActivityType["DIVIDEND"] = 3] = "DIVIDEND";
+    ActivityType[ActivityType["DIVIDEND"] = 4] = "DIVIDEND";
     /** INTEREST - Interest payment to an account */
-    ActivityType[ActivityType["INTEREST"] = 4] = "INTEREST";
+    ActivityType[ActivityType["INTEREST"] = 5] = "INTEREST";
     /** RECEIVED - Received funds from another account */
-    ActivityType[ActivityType["RECEIVED"] = 5] = "RECEIVED";
+    ActivityType[ActivityType["RECEIVED"] = 6] = "RECEIVED";
     /** SENT - Sent funds from this account to another account */
-    ActivityType[ActivityType["SENT"] = 6] = "SENT";
+    ActivityType[ActivityType["SENT"] = 7] = "SENT";
     /** SUBSCRIPTION - Subscription to a service or product */
-    ActivityType[ActivityType["SUBSCRIPTION"] = 7] = "SUBSCRIPTION";
+    ActivityType[ActivityType["SUBSCRIPTION"] = 8] = "SUBSCRIPTION";
     ActivityType[ActivityType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(ActivityType || (ActivityType = {}));
 export function activityTypeFromJSON(object) {
@@ -38,24 +40,27 @@ export function activityTypeFromJSON(object) {
         case "NOT_USED_ACTIVITY_TYPE":
             return ActivityType.NOT_USED_ACTIVITY_TYPE;
         case 1:
+        case "ORDER":
+            return ActivityType.ORDER;
+        case 2:
         case "DEPOSIT":
             return ActivityType.DEPOSIT;
-        case 2:
+        case 3:
         case "WITHDRAWAL":
             return ActivityType.WITHDRAWAL;
-        case 3:
+        case 4:
         case "DIVIDEND":
             return ActivityType.DIVIDEND;
-        case 4:
+        case 5:
         case "INTEREST":
             return ActivityType.INTEREST;
-        case 5:
+        case 6:
         case "RECEIVED":
             return ActivityType.RECEIVED;
-        case 6:
+        case 7:
         case "SENT":
             return ActivityType.SENT;
-        case 7:
+        case 8:
         case "SUBSCRIPTION":
             return ActivityType.SUBSCRIPTION;
         case -1:
@@ -68,6 +73,8 @@ export function activityTypeToJSON(object) {
     switch (object) {
         case ActivityType.NOT_USED_ACTIVITY_TYPE:
             return "NOT_USED_ACTIVITY_TYPE";
+        case ActivityType.ORDER:
+            return "ORDER";
         case ActivityType.DEPOSIT:
             return "DEPOSIT";
         case ActivityType.WITHDRAWAL:
@@ -167,9 +174,9 @@ function createBaseTrade() {
         Processed: false,
         Status: undefined,
         USD: undefined,
-        TradeType: 0,
+        TradeType: undefined,
         Commission: undefined,
-        TimeInForce: 0,
+        TimeInForce: undefined,
         ActivityType: undefined,
         Inverted: false,
     };
@@ -227,13 +234,13 @@ export const Trade = {
         if (message.USD !== undefined) {
             writer.uint32(325).float(message.USD);
         }
-        if (message.TradeType !== 0) {
+        if (message.TradeType !== undefined) {
             writer.uint32(328).int32(message.TradeType);
         }
         if (message.Commission !== undefined) {
             writer.uint32(337).double(message.Commission);
         }
-        if (message.TimeInForce !== 0) {
+        if (message.TimeInForce !== undefined) {
             writer.uint32(344).int32(message.TimeInForce);
         }
         if (message.ActivityType !== undefined) {
@@ -410,9 +417,9 @@ export const Trade = {
             Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
             Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
             USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
-            TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
+            TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : undefined,
             Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
-            TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+            TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
             ActivityType: isSet(object.ActivityType) ? activityTypeFromJSON(object.ActivityType) : undefined,
             Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
         };
@@ -470,13 +477,13 @@ export const Trade = {
         if (message.USD !== undefined) {
             obj.USD = message.USD;
         }
-        if (message.TradeType !== 0) {
+        if (message.TradeType !== undefined) {
             obj.TradeType = tradeTypeToJSON(message.TradeType);
         }
         if (message.Commission !== undefined) {
             obj.Commission = message.Commission;
         }
-        if (message.TimeInForce !== 0) {
+        if (message.TimeInForce !== undefined) {
             obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
         }
         if (message.ActivityType !== undefined) {
@@ -518,9 +525,9 @@ export const Trade = {
         message.Processed = (_l = object.Processed) !== null && _l !== void 0 ? _l : false;
         message.Status = (_m = object.Status) !== null && _m !== void 0 ? _m : undefined;
         message.USD = (_o = object.USD) !== null && _o !== void 0 ? _o : undefined;
-        message.TradeType = (_p = object.TradeType) !== null && _p !== void 0 ? _p : 0;
+        message.TradeType = (_p = object.TradeType) !== null && _p !== void 0 ? _p : undefined;
         message.Commission = (_q = object.Commission) !== null && _q !== void 0 ? _q : undefined;
-        message.TimeInForce = (_r = object.TimeInForce) !== null && _r !== void 0 ? _r : 0;
+        message.TimeInForce = (_r = object.TimeInForce) !== null && _r !== void 0 ? _r : undefined;
         message.ActivityType = (_s = object.ActivityType) !== null && _s !== void 0 ? _s : undefined;
         message.Inverted = (_t = object.Inverted) !== null && _t !== void 0 ? _t : false;
         return message;

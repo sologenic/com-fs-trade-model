@@ -12,7 +12,7 @@ import "sologenic/com-fs-utils-lib/go/decimal/decimal.proto";
 import "sologenic/com-fs-order-model/broker.proto";
 
 // Key in store is TXID-Sequence-Metadata.Network
-message Trade {
+message Trade { // Synonym for Transaction, which would have been a better name
     string UserID = 1;
     string OrderKey = 2; // Datastore key: OrderID-SmartContractAddr-Network
     int64 Sequence = 3; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
@@ -38,9 +38,9 @@ message Trade {
     // USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
     optional float USD = 40; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
 
-    order.TradeType TradeType = 41; // The type of the trade, e.g. limit, market, etc.
+    optional order.TradeType TradeType = 41; // The type of the trade, e.g. limit, market, etc.
     optional double Commission = 42; // The commission paid to the brokerage
-    order.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+    optional order.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 
     // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
     // Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
@@ -54,13 +54,14 @@ message Trade {
 
 enum ActivityType {
     NOT_USED_ACTIVITY_TYPE = 0;
-    DEPOSIT = 1; // Deposit of funds to an account
-    WITHDRAWAL = 2; // Withdrawal of funds from an account
-    DIVIDEND = 3; // Dividend payment to an account
-    INTEREST = 4; // Interest payment to an account
-    RECEIVED = 5; // Received funds from another account
-    SENT = 6; // Sent funds from this account to another account
-    SUBSCRIPTION = 7; // Subscription to a service or product
+    ORDER = 1; // Order related: buy, sell, cancel
+    DEPOSIT = 2; // Deposit of funds to an account
+    WITHDRAWAL = 3; // Withdrawal of funds from an account
+    DIVIDEND = 4; // Dividend payment to an account
+    INTEREST = 5; // Interest payment to an account
+    RECEIVED = 6; // Received funds from another account
+    SENT = 7; // Sent funds from this account to another account
+    SUBSCRIPTION = 8; // Subscription to a service or product
 }
 
 message Trades {

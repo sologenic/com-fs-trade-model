@@ -25,20 +25,22 @@ export const protobufPackage = "trade";
 
 export enum ActivityType {
   NOT_USED_ACTIVITY_TYPE = 0,
+  /** ORDER - Order related: buy, sell, cancel */
+  ORDER = 1,
   /** DEPOSIT - Deposit of funds to an account */
-  DEPOSIT = 1,
+  DEPOSIT = 2,
   /** WITHDRAWAL - Withdrawal of funds from an account */
-  WITHDRAWAL = 2,
+  WITHDRAWAL = 3,
   /** DIVIDEND - Dividend payment to an account */
-  DIVIDEND = 3,
+  DIVIDEND = 4,
   /** INTEREST - Interest payment to an account */
-  INTEREST = 4,
+  INTEREST = 5,
   /** RECEIVED - Received funds from another account */
-  RECEIVED = 5,
+  RECEIVED = 6,
   /** SENT - Sent funds from this account to another account */
-  SENT = 6,
+  SENT = 7,
   /** SUBSCRIPTION - Subscription to a service or product */
-  SUBSCRIPTION = 7,
+  SUBSCRIPTION = 8,
   UNRECOGNIZED = -1,
 }
 
@@ -48,24 +50,27 @@ export function activityTypeFromJSON(object: any): ActivityType {
     case "NOT_USED_ACTIVITY_TYPE":
       return ActivityType.NOT_USED_ACTIVITY_TYPE;
     case 1:
+    case "ORDER":
+      return ActivityType.ORDER;
+    case 2:
     case "DEPOSIT":
       return ActivityType.DEPOSIT;
-    case 2:
+    case 3:
     case "WITHDRAWAL":
       return ActivityType.WITHDRAWAL;
-    case 3:
+    case 4:
     case "DIVIDEND":
       return ActivityType.DIVIDEND;
-    case 4:
+    case 5:
     case "INTEREST":
       return ActivityType.INTEREST;
-    case 5:
+    case 6:
     case "RECEIVED":
       return ActivityType.RECEIVED;
-    case 6:
+    case 7:
     case "SENT":
       return ActivityType.SENT;
-    case 7:
+    case 8:
     case "SUBSCRIPTION":
       return ActivityType.SUBSCRIPTION;
     case -1:
@@ -79,6 +84,8 @@ export function activityTypeToJSON(object: ActivityType): string {
   switch (object) {
     case ActivityType.NOT_USED_ACTIVITY_TYPE:
       return "NOT_USED_ACTIVITY_TYPE";
+    case ActivityType.ORDER:
+      return "ORDER";
     case ActivityType.DEPOSIT:
       return "DEPOSIT";
     case ActivityType.WITHDRAWAL:
@@ -204,13 +211,17 @@ export interface Trade {
     | number
     | undefined;
   /** The type of the trade, e.g. limit, market, etc. */
-  TradeType: TradeType;
+  TradeType?:
+    | TradeType
+    | undefined;
   /** The commission paid to the brokerage */
   Commission?:
     | number
     | undefined;
   /** The time in force for the trade, e.g. GTC, IOC, FOK, etc. */
-  TimeInForce: TimeInForce;
+  TimeInForce?:
+    | TimeInForce
+    | undefined;
   /**
    * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
    * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
@@ -251,9 +262,9 @@ function createBaseTrade(): Trade {
     Processed: false,
     Status: undefined,
     USD: undefined,
-    TradeType: 0,
+    TradeType: undefined,
     Commission: undefined,
-    TimeInForce: 0,
+    TimeInForce: undefined,
     ActivityType: undefined,
     Inverted: false,
   };
@@ -312,13 +323,13 @@ export const Trade = {
     if (message.USD !== undefined) {
       writer.uint32(325).float(message.USD);
     }
-    if (message.TradeType !== 0) {
+    if (message.TradeType !== undefined) {
       writer.uint32(328).int32(message.TradeType);
     }
     if (message.Commission !== undefined) {
       writer.uint32(337).double(message.Commission);
     }
-    if (message.TimeInForce !== 0) {
+    if (message.TimeInForce !== undefined) {
       writer.uint32(344).int32(message.TimeInForce);
     }
     if (message.ActivityType !== undefined) {
@@ -519,9 +530,9 @@ export const Trade = {
       Processed: isSet(object.Processed) ? globalThis.Boolean(object.Processed) : false,
       Status: isSet(object.Status) ? statusFromJSON(object.Status) : undefined,
       USD: isSet(object.USD) ? globalThis.Number(object.USD) : undefined,
-      TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : 0,
+      TradeType: isSet(object.TradeType) ? tradeTypeFromJSON(object.TradeType) : undefined,
       Commission: isSet(object.Commission) ? globalThis.Number(object.Commission) : undefined,
-      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : 0,
+      TimeInForce: isSet(object.TimeInForce) ? timeInForceFromJSON(object.TimeInForce) : undefined,
       ActivityType: isSet(object.ActivityType) ? activityTypeFromJSON(object.ActivityType) : undefined,
       Inverted: isSet(object.Inverted) ? globalThis.Boolean(object.Inverted) : false,
     };
@@ -580,13 +591,13 @@ export const Trade = {
     if (message.USD !== undefined) {
       obj.USD = message.USD;
     }
-    if (message.TradeType !== 0) {
+    if (message.TradeType !== undefined) {
       obj.TradeType = tradeTypeToJSON(message.TradeType);
     }
     if (message.Commission !== undefined) {
       obj.Commission = message.Commission;
     }
-    if (message.TimeInForce !== 0) {
+    if (message.TimeInForce !== undefined) {
       obj.TimeInForce = timeInForceToJSON(message.TimeInForce);
     }
     if (message.ActivityType !== undefined) {
@@ -628,9 +639,9 @@ export const Trade = {
     message.Processed = object.Processed ?? false;
     message.Status = object.Status ?? undefined;
     message.USD = object.USD ?? undefined;
-    message.TradeType = object.TradeType ?? 0;
+    message.TradeType = object.TradeType ?? undefined;
     message.Commission = object.Commission ?? undefined;
-    message.TimeInForce = object.TimeInForce ?? 0;
+    message.TimeInForce = object.TimeInForce ?? undefined;
     message.ActivityType = object.ActivityType ?? undefined;
     message.Inverted = object.Inverted ?? false;
     return message;

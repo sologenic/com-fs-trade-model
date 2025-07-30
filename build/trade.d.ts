@@ -7,20 +7,22 @@ import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order
 export declare const protobufPackage = "trade";
 export declare enum ActivityType {
     NOT_USED_ACTIVITY_TYPE = 0,
+    /** ORDER - Order related: buy, sell, cancel */
+    ORDER = 1,
     /** DEPOSIT - Deposit of funds to an account */
-    DEPOSIT = 1,
+    DEPOSIT = 2,
     /** WITHDRAWAL - Withdrawal of funds from an account */
-    WITHDRAWAL = 2,
+    WITHDRAWAL = 3,
     /** DIVIDEND - Dividend payment to an account */
-    DIVIDEND = 3,
+    DIVIDEND = 4,
     /** INTEREST - Interest payment to an account */
-    INTEREST = 4,
+    INTEREST = 5,
     /** RECEIVED - Received funds from another account */
-    RECEIVED = 5,
+    RECEIVED = 6,
     /** SENT - Sent funds from this account to another account */
-    SENT = 6,
+    SENT = 7,
     /** SUBSCRIPTION - Subscription to a service or product */
-    SUBSCRIPTION = 7,
+    SUBSCRIPTION = 8,
     UNRECOGNIZED = -1
 }
 export declare function activityTypeFromJSON(object: any): ActivityType;
@@ -71,11 +73,11 @@ export interface Trade {
     /** USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc. */
     USD?: number | undefined;
     /** The type of the trade, e.g. limit, market, etc. */
-    TradeType: TradeType;
+    TradeType?: TradeType | undefined;
     /** The commission paid to the brokerage */
     Commission?: number | undefined;
     /** The time in force for the trade, e.g. GTC, IOC, FOK, etc. */
-    TimeInForce: TimeInForce;
+    TimeInForce?: TimeInForce | undefined;
     /**
      * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
      * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
