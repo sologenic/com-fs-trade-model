@@ -213,7 +213,7 @@ export interface Trade {
   TimeInForce: TimeInForce;
   /**
    * Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-   * Since wallets hold tokenized assets, inflow activities (e.g. deposits, dividends, received) are treated as "buy" and outflow activities (e.g. withdrawals, transfers) as "sell"
+   * Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, transfers) as "sell"
    */
   ActivityType?:
     | ActivityType

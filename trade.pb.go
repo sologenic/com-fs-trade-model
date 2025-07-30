@@ -182,7 +182,7 @@ type Trade struct {
 	Commission  *float64                       `protobuf:"fixed64,42,opt,name=Commission,proto3,oneof" json:"Commission,omitempty"`                   // The commission paid to the brokerage
 	TimeInForce com_fs_order_model.TimeInForce `protobuf:"varint,43,opt,name=TimeInForce,proto3,enum=order.TimeInForce" json:"TimeInForce,omitempty"` // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 	// Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-	// Since wallets hold tokenized assets, inflow activities (e.g. deposits, dividends, received) are treated as "buy" and outflow activities (e.g. withdrawals, transfers) as "sell"
+	// Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, transfers) as "sell"
 	ActivityType *ActivityType `protobuf:"varint,44,opt,name=ActivityType,proto3,enum=trade.ActivityType,oneof" json:"ActivityType,omitempty"`
 	// Trades get stored in alphabetical order of the denom pair.
 	// Data is "uninverted" on retrieval and

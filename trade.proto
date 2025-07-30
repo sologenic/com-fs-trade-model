@@ -43,7 +43,7 @@ message Trade {
     order.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 
     // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-    // Since wallets hold tokenized assets, inflow activities (e.g. deposits, dividends, received) are treated as "buy" and outflow activities (e.g. withdrawals, transfers) as "sell"
+    // Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, transfers) as "sell"
     optional ActivityType ActivityType = 44;
 
     // Trades get stored in alphabetical order of the denom pair. 
