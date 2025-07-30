@@ -42,10 +42,25 @@ message Trade {
     optional double Commission = 42; // The commission paid to the brokerage
     order.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 
+    // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
+    // Since wallets hold tokenized assets, inflow activities (e.g. deposits, dividends, received) are treated as "buy" and outflow activities (e.g. withdrawals, transfers) as "sell"
+    optional ActivityType ActivityType = 44;
+
     // Trades get stored in alphabetical order of the denom pair. 
     // Data is "uninverted" on retrieval and 
     // this flag only indicates that the denoms as seen in the record are not in the original order
     bool Inverted = 50;
+}
+
+enum ActivityType {
+    NOT_USED_ACTIVITY_TYPE = 0;
+    DEPOSIT = 1; // Deposit of funds to an account
+    WITHDRAWAL = 2; // Withdrawal of funds from an account
+    DIVIDEND = 3; // Dividend payment to an account
+    INTEREST = 4; // Interest payment to an account
+    RECEIVED = 5; // Received funds from another account
+    TRANSFER = 6; // Transfer of funds between accounts
+    SUBSCRIPTION = 7; // Subscription to a service or product
 }
 
 message Trades {
