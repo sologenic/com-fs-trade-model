@@ -173,7 +173,9 @@ export function statusToJSON(object: Status): string {
 export interface Trade {
   UserID: string;
   /** Datastore key: OrderID-SmartContractAddr-Network */
-  OrderKey: string;
+  OrderKey?:
+    | string
+    | undefined;
   /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
   Sequence: number;
   Amount: Decimal | undefined;
@@ -186,7 +188,7 @@ export interface Trade {
   Denom2:
     | Denom
     | undefined;
-  /** The buy/sell (e.g. did the user place a buy or sell order) */
+  /** The buy/sell (in the context of transactions, buys are inflow of funds and sells are outflow of funds) */
   Side: Side;
   /** The time the trade was executed in UTC */
   BlockTime: Date | undefined;
@@ -246,7 +248,7 @@ export interface Trades {
 function createBaseTrade(): Trade {
   return {
     UserID: "",
-    OrderKey: "",
+    OrderKey: undefined,
     Sequence: 0,
     Amount: undefined,
     Price: 0,
@@ -275,7 +277,7 @@ export const Trade = {
     if (message.UserID !== "") {
       writer.uint32(10).string(message.UserID);
     }
-    if (message.OrderKey !== "") {
+    if (message.OrderKey !== undefined) {
       writer.uint32(18).string(message.OrderKey);
     }
     if (message.Sequence !== 0) {
@@ -514,7 +516,7 @@ export const Trade = {
   fromJSON(object: any): Trade {
     return {
       UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
-      OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
+      OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : undefined,
       Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
       Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
       Price: isSet(object.Price) ? globalThis.Number(object.Price) : 0,
@@ -543,7 +545,7 @@ export const Trade = {
     if (message.UserID !== "") {
       obj.UserID = message.UserID;
     }
-    if (message.OrderKey !== "") {
+    if (message.OrderKey !== undefined) {
       obj.OrderKey = message.OrderKey;
     }
     if (message.Sequence !== 0) {
@@ -615,7 +617,7 @@ export const Trade = {
   fromPartial<I extends Exact<DeepPartial<Trade>, I>>(object: I): Trade {
     const message = createBaseTrade();
     message.UserID = object.UserID ?? "";
-    message.OrderKey = object.OrderKey ?? "";
+    message.OrderKey = object.OrderKey ?? undefined;
     message.Sequence = object.Sequence ?? 0;
     message.Amount = (object.Amount !== undefined && object.Amount !== null)
       ? Decimal.fromPartial(object.Amount)

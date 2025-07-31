@@ -43,7 +43,7 @@ export declare function statusToJSON(object: Status): string;
 export interface Trade {
     UserID: string;
     /** Datastore key: OrderID-SmartContractAddr-Network */
-    OrderKey: string;
+    OrderKey?: string | undefined;
     /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
     Sequence: number;
     Amount: Decimal | undefined;
@@ -52,7 +52,7 @@ export interface Trade {
     Denom1: Denom | undefined;
     /** Asset denom (e.g. suaapl_1-smartContractAddr) */
     Denom2: Denom | undefined;
-    /** The buy/sell (e.g. did the user place a buy or sell order) */
+    /** The buy/sell (in the context of transactions, buys are inflow of funds and sells are outflow of funds) */
     Side: Side;
     /** The time the trade was executed in UTC */
     BlockTime: Date | undefined;

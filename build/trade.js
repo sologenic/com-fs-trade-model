@@ -158,7 +158,7 @@ export function statusToJSON(object) {
 function createBaseTrade() {
     return {
         UserID: "",
-        OrderKey: "",
+        OrderKey: undefined,
         Sequence: 0,
         Amount: undefined,
         Price: 0,
@@ -186,7 +186,7 @@ export const Trade = {
         if (message.UserID !== "") {
             writer.uint32(10).string(message.UserID);
         }
-        if (message.OrderKey !== "") {
+        if (message.OrderKey !== undefined) {
             writer.uint32(18).string(message.OrderKey);
         }
         if (message.Sequence !== 0) {
@@ -401,7 +401,7 @@ export const Trade = {
     fromJSON(object) {
         return {
             UserID: isSet(object.UserID) ? globalThis.String(object.UserID) : "",
-            OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : "",
+            OrderKey: isSet(object.OrderKey) ? globalThis.String(object.OrderKey) : undefined,
             Sequence: isSet(object.Sequence) ? globalThis.Number(object.Sequence) : 0,
             Amount: isSet(object.Amount) ? Decimal.fromJSON(object.Amount) : undefined,
             Price: isSet(object.Price) ? globalThis.Number(object.Price) : 0,
@@ -429,7 +429,7 @@ export const Trade = {
         if (message.UserID !== "") {
             obj.UserID = message.UserID;
         }
-        if (message.OrderKey !== "") {
+        if (message.OrderKey !== undefined) {
             obj.OrderKey = message.OrderKey;
         }
         if (message.Sequence !== 0) {
@@ -501,7 +501,7 @@ export const Trade = {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
         const message = createBaseTrade();
         message.UserID = (_a = object.UserID) !== null && _a !== void 0 ? _a : "";
-        message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : "";
+        message.OrderKey = (_b = object.OrderKey) !== null && _b !== void 0 ? _b : undefined;
         message.Sequence = (_c = object.Sequence) !== null && _c !== void 0 ? _c : 0;
         message.Amount = (object.Amount !== undefined && object.Amount !== null)
             ? Decimal.fromPartial(object.Amount)
