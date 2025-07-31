@@ -38,6 +38,7 @@ message Filter {
     // Use for batch queries (with IN operator) instead of Denom1/Denom2
     repeated string Denom1Symbols = 15; // List of Denom1 symbols to filter trades
     repeated string Denom2Symbols = 16; // List of Denom2 symbols to filter trades
+    optional ActivityType ActivityType = 17; // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
 }
 
 message TradeKey {
