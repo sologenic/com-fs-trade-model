@@ -1,6 +1,7 @@
 import _m0 from "protobufjs/minimal";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
-import { TimeInForce, TradeType } from "./sologenic/com-fs-order-model/broker";
+import { TradeType } from "./sologenic/com-fs-order-model/broker";
+import { TimeInForce } from "./sologenic/com-fs-order-model/util";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
@@ -46,7 +47,9 @@ export interface Trade {
     OrderKey?: string | undefined;
     /** The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) */
     Sequence: number;
+    /** Last fill quantity from the most recent fill/partial fill event */
     Amount: Decimal | undefined;
+    /** Last fill price from the most recent fill/partial fill event */
     Price: number;
     /** Base currency (e.g. suwusdc_1-smartContractAddr) */
     Denom1: Denom | undefined;
@@ -89,6 +92,14 @@ export interface Trade {
      * this flag only indicates that the denoms as seen in the record are not in the original order
      */
     Inverted: boolean;
+    /** Order request details - what the user originally requested when placing the order */
+    RequestedQty?: Decimal | undefined;
+    /** Limit price set by the user */
+    LimitPrice?: number | undefined;
+    /** Actual execution details - cumulative results across all fills */
+    FilledQty?: Decimal | undefined;
+    /** Average execution price */
+    FilledAvgPrice?: number | undefined;
 }
 export interface Trades {
     Trades: Trade[];
@@ -149,6 +160,16 @@ export declare const Trade: {
         TimeInForce?: TimeInForce | undefined;
         ActivityType?: ActivityType | undefined;
         Inverted?: boolean | undefined;
+        RequestedQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        LimitPrice?: number | undefined;
+        FilledQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledAvgPrice?: number | undefined;
     } & {
         UserID?: string | undefined;
         OrderKey?: string | undefined;
@@ -230,7 +251,23 @@ export declare const Trade: {
         TimeInForce?: TimeInForce | undefined;
         ActivityType?: ActivityType | undefined;
         Inverted?: boolean | undefined;
-    } & { [K_6 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
+        RequestedQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_6 in Exclude<keyof I["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+        LimitPrice?: number | undefined;
+        FilledQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_7 in Exclude<keyof I["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        FilledAvgPrice?: number | undefined;
+    } & { [K_8 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
     fromPartial<I_1 extends {
         UserID?: string | undefined;
         OrderKey?: string | undefined;
@@ -280,6 +317,16 @@ export declare const Trade: {
         TimeInForce?: TimeInForce | undefined;
         ActivityType?: ActivityType | undefined;
         Inverted?: boolean | undefined;
+        RequestedQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        LimitPrice?: number | undefined;
+        FilledQty?: {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } | undefined;
+        FilledAvgPrice?: number | undefined;
     } & {
         UserID?: string | undefined;
         OrderKey?: string | undefined;
@@ -290,7 +337,7 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_7 in Exclude<keyof I_1["Amount"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_9 in Exclude<keyof I_1["Amount"], keyof Decimal>]: never; }) | undefined;
         Price?: number | undefined;
         Denom1?: ({
             Currency?: {
@@ -308,12 +355,12 @@ export declare const Trade: {
             } & {
                 Symbol?: string | undefined;
                 Version?: string | undefined;
-            } & { [K_8 in Exclude<keyof I_1["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+            } & { [K_10 in Exclude<keyof I_1["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
             Subunit?: string | undefined;
             Issuer?: string | undefined;
             Precision?: number | undefined;
             Description?: string | undefined;
-        } & { [K_9 in Exclude<keyof I_1["Denom1"], keyof Denom>]: never; }) | undefined;
+        } & { [K_11 in Exclude<keyof I_1["Denom1"], keyof Denom>]: never; }) | undefined;
         Denom2?: ({
             Currency?: {
                 Symbol?: string | undefined;
@@ -330,12 +377,12 @@ export declare const Trade: {
             } & {
                 Symbol?: string | undefined;
                 Version?: string | undefined;
-            } & { [K_10 in Exclude<keyof I_1["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+            } & { [K_12 in Exclude<keyof I_1["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
             Subunit?: string | undefined;
             Issuer?: string | undefined;
             Precision?: number | undefined;
             Description?: string | undefined;
-        } & { [K_11 in Exclude<keyof I_1["Denom2"], keyof Denom>]: never; }) | undefined;
+        } & { [K_13 in Exclude<keyof I_1["Denom2"], keyof Denom>]: never; }) | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
         OrganizationID?: string | undefined;
@@ -349,7 +396,7 @@ export declare const Trade: {
             UpdatedAt?: Date | undefined;
             CreatedAt?: Date | undefined;
             UpdatedByAccount?: string | undefined;
-        } & { [K_12 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
+        } & { [K_14 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
         TXID?: string | undefined;
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
@@ -361,7 +408,23 @@ export declare const Trade: {
         TimeInForce?: TimeInForce | undefined;
         ActivityType?: ActivityType | undefined;
         Inverted?: boolean | undefined;
-    } & { [K_13 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
+        RequestedQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_15 in Exclude<keyof I_1["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+        LimitPrice?: number | undefined;
+        FilledQty?: ({
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & {
+            Value?: number | undefined;
+            Exp?: number | undefined;
+        } & { [K_16 in Exclude<keyof I_1["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        FilledAvgPrice?: number | undefined;
+    } & { [K_17 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
 };
 export declare const Trades: {
     encode(message: Trades, writer?: _m0.Writer): _m0.Writer;
@@ -418,6 +481,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -470,6 +543,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[] & ({
             UserID?: string | undefined;
             OrderKey?: string | undefined;
@@ -519,6 +602,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         } & {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
@@ -600,7 +693,23 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
-        } & { [K_6 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_7 in Exclude<keyof I["Trades"], keyof {
+            RequestedQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_6 in Exclude<keyof I["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_7 in Exclude<keyof I["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            FilledAvgPrice?: number | undefined;
+        } & { [K_8 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_9 in Exclude<keyof I["Trades"], keyof {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
             Sequence?: number | undefined;
@@ -649,9 +758,19 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_8 in Exclude<keyof I, keyof Trades>]: never; }>(base?: I | undefined): Trades;
+    } & { [K_10 in Exclude<keyof I, keyof Trades>]: never; }>(base?: I | undefined): Trades;
     fromPartial<I_1 extends {
         Trades?: {
             UserID?: string | undefined;
@@ -702,6 +821,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[] | undefined;
         Offset?: number | undefined;
     } & {
@@ -754,6 +883,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[] & ({
             UserID?: string | undefined;
             OrderKey?: string | undefined;
@@ -803,6 +942,16 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         } & {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
@@ -813,7 +962,7 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_9 in Exclude<keyof I_1["Trades"][number]["Amount"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_11 in Exclude<keyof I_1["Trades"][number]["Amount"], keyof Decimal>]: never; }) | undefined;
             Price?: number | undefined;
             Denom1?: ({
                 Currency?: {
@@ -831,12 +980,12 @@ export declare const Trades: {
                 } & {
                     Symbol?: string | undefined;
                     Version?: string | undefined;
-                } & { [K_10 in Exclude<keyof I_1["Trades"][number]["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+                } & { [K_12 in Exclude<keyof I_1["Trades"][number]["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
                 Subunit?: string | undefined;
                 Issuer?: string | undefined;
                 Precision?: number | undefined;
                 Description?: string | undefined;
-            } & { [K_11 in Exclude<keyof I_1["Trades"][number]["Denom1"], keyof Denom>]: never; }) | undefined;
+            } & { [K_13 in Exclude<keyof I_1["Trades"][number]["Denom1"], keyof Denom>]: never; }) | undefined;
             Denom2?: ({
                 Currency?: {
                     Symbol?: string | undefined;
@@ -853,12 +1002,12 @@ export declare const Trades: {
                 } & {
                     Symbol?: string | undefined;
                     Version?: string | undefined;
-                } & { [K_12 in Exclude<keyof I_1["Trades"][number]["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+                } & { [K_14 in Exclude<keyof I_1["Trades"][number]["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
                 Subunit?: string | undefined;
                 Issuer?: string | undefined;
                 Precision?: number | undefined;
                 Description?: string | undefined;
-            } & { [K_13 in Exclude<keyof I_1["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
+            } & { [K_15 in Exclude<keyof I_1["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
@@ -872,7 +1021,7 @@ export declare const Trades: {
                 UpdatedAt?: Date | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedByAccount?: string | undefined;
-            } & { [K_14 in Exclude<keyof I_1["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
+            } & { [K_16 in Exclude<keyof I_1["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             TXID?: string | undefined;
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
@@ -884,7 +1033,23 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
-        } & { [K_15 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_16 in Exclude<keyof I_1["Trades"], keyof {
+            RequestedQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_17 in Exclude<keyof I_1["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: ({
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } & { [K_18 in Exclude<keyof I_1["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            FilledAvgPrice?: number | undefined;
+        } & { [K_19 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_20 in Exclude<keyof I_1["Trades"], keyof {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
             Sequence?: number | undefined;
@@ -933,9 +1098,19 @@ export declare const Trades: {
             TimeInForce?: TimeInForce | undefined;
             ActivityType?: ActivityType | undefined;
             Inverted?: boolean | undefined;
+            RequestedQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            LimitPrice?: number | undefined;
+            FilledQty?: {
+                Value?: number | undefined;
+                Exp?: number | undefined;
+            } | undefined;
+            FilledAvgPrice?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_17 in Exclude<keyof I_1, keyof Trades>]: never; }>(object: I_1): Trades;
+    } & { [K_21 in Exclude<keyof I_1, keyof Trades>]: never; }>(object: I_1): Trades;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export type DeepPartial<T> = T extends Builtin ? T : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {
