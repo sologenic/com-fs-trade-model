@@ -24,7 +24,7 @@ message Trade { // Synonym for Transaction, which would have been a better name
     orderproperties.Side Side = 8;  // The buy/sell (in the context of transactions, buys are inflow of funds and sells are outflow of funds)
     google.protobuf.Timestamp BlockTime = 9; // The time the trade was executed in UTC
     string OrganizationID = 10;
-
+    optional Receiver Receiver = 11; // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
     // Standard storage related fields
     metadata.MetaData MetaData = 30;
     optional string TXID = 31;
@@ -75,6 +75,18 @@ enum ActivityType {
 message Trades {
     repeated Trade Trades = 1;
     optional int32 Offset = 2; // Offset for pagination
+}
+
+message Receiver {
+    string Address = 1; // The address of the receiver, used for sending of funds.
+    ReceiverType Type = 2; // The type of the receiver, e.g. email, tx address, blockchain address from another blockchain.
+}
+
+enum ReceiverType {
+    EMAIL = 0;
+    TX = 1;
+    ETHEREUM = 2;
+    SOLANA = 3;
 }
 
 enum Status {
