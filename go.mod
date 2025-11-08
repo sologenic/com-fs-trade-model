@@ -3,14 +3,14 @@ module github.com/sologenic/com-fs-trade-model
 go 1.24.4
 
 require (
-	github.com/sologenic/com-fs-asset-model v0.0.0-20250923172806-23e0eb1f12a8
-	github.com/sologenic/com-fs-order-model v0.0.0-20250923221917-b98afe511d4f
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20250915133913-34ed554e333f
+	github.com/sologenic/com-fs-asset-model v0.0.0-20251021201834-36ccc38df721
+	github.com/sologenic/com-fs-order-model v0.0.0-20251107224905-60459b8aa50d
+	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20251107220602-a0757ed42489
 	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20250628003024-44d0698ab496
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20250917193130-a63d775c7b6d
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20251107220602-a0757ed42489
 	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20250628003024-44d0698ab496
-	google.golang.org/grpc v1.75.1
-	google.golang.org/protobuf v1.36.9
+	google.golang.org/grpc v1.76.0
+	google.golang.org/protobuf v1.36.10
 )
 
 require (
@@ -29,18 +29,18 @@ require (
 	github.com/rs/zerolog v1.34.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35 // indirect
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20250917193130-a63d775c7b6d // indirect
-	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20250917193130-a63d775c7b6d // indirect
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20251107220602-a0757ed42489 // indirect
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20251107220602-a0757ed42489 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
-	golang.org/x/crypto v0.42.0 // indirect
-	golang.org/x/net v0.44.0 // indirect
+	golang.org/x/crypto v0.43.0 // indirect
+	golang.org/x/net v0.46.0 // indirect
 	golang.org/x/oauth2 v0.31.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/text v0.29.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 	google.golang.org/api v0.249.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250908214217-97024824d090 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251103181224-f26f9409b101 // indirect
 )

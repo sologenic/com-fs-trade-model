@@ -28,6 +28,15 @@ export declare enum ActivityType {
 }
 export declare function activityTypeFromJSON(object: any): ActivityType;
 export declare function activityTypeToJSON(object: ActivityType): string;
+export declare enum ReceiverType {
+    EMAIL = 0,
+    TX = 1,
+    ETHEREUM = 2,
+    SOLANA = 3,
+    UNRECOGNIZED = -1
+}
+export declare function receiverTypeFromJSON(object: any): ReceiverType;
+export declare function receiverTypeToJSON(object: ReceiverType): string;
 export declare enum Status {
     NOT_USED_STATUS = 0,
     PARTIALLY_FILLED = 1,
@@ -60,6 +69,8 @@ export interface Trade {
     /** The time the trade was executed in UTC */
     BlockTime: Date | undefined;
     OrganizationID: string;
+    /** The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain. */
+    Receiver?: Receiver | undefined;
     /** Standard storage related fields */
     MetaData: MetaData | undefined;
     TXID?: string | undefined;
@@ -106,6 +117,12 @@ export interface Trades {
     /** Offset for pagination */
     Offset?: number | undefined;
 }
+export interface Receiver {
+    /** The address of the receiver, used for sending of funds. */
+    Address: string;
+    /** The type of the receiver, e.g. email, tx address, blockchain address from another blockchain. */
+    Type: ReceiverType;
+}
 export declare const Trade: {
     encode(message: Trade, writer?: _m0.Writer): _m0.Writer;
     decode(input: _m0.Reader | Uint8Array, length?: number): Trade;
@@ -143,6 +160,10 @@ export declare const Trade: {
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
         OrganizationID?: string | undefined;
+        Receiver?: {
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -229,6 +250,13 @@ export declare const Trade: {
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
         OrganizationID?: string | undefined;
+        Receiver?: ({
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } & {
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } & { [K_5 in Exclude<keyof I["Receiver"], keyof Receiver>]: never; }) | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -239,7 +267,7 @@ export declare const Trade: {
             UpdatedAt?: Date | undefined;
             CreatedAt?: Date | undefined;
             UpdatedByAccount?: string | undefined;
-        } & { [K_5 in Exclude<keyof I["MetaData"], keyof MetaData>]: never; }) | undefined;
+        } & { [K_6 in Exclude<keyof I["MetaData"], keyof MetaData>]: never; }) | undefined;
         TXID?: string | undefined;
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
@@ -257,7 +285,7 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_6 in Exclude<keyof I["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_7 in Exclude<keyof I["RequestedQty"], keyof Decimal>]: never; }) | undefined;
         LimitPrice?: number | undefined;
         FilledQty?: ({
             Value?: number | undefined;
@@ -265,9 +293,9 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_7 in Exclude<keyof I["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_8 in Exclude<keyof I["FilledQty"], keyof Decimal>]: never; }) | undefined;
         FilledAvgPrice?: number | undefined;
-    } & { [K_8 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
+    } & { [K_9 in Exclude<keyof I, keyof Trade>]: never; }>(base?: I | undefined): Trade;
     fromPartial<I_1 extends {
         UserID?: string | undefined;
         OrderKey?: string | undefined;
@@ -300,6 +328,10 @@ export declare const Trade: {
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
         OrganizationID?: string | undefined;
+        Receiver?: {
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } | undefined;
         MetaData?: {
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -337,7 +369,7 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_9 in Exclude<keyof I_1["Amount"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_10 in Exclude<keyof I_1["Amount"], keyof Decimal>]: never; }) | undefined;
         Price?: number | undefined;
         Denom1?: ({
             Currency?: {
@@ -355,12 +387,12 @@ export declare const Trade: {
             } & {
                 Symbol?: string | undefined;
                 Version?: string | undefined;
-            } & { [K_10 in Exclude<keyof I_1["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+            } & { [K_11 in Exclude<keyof I_1["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
             Subunit?: string | undefined;
             Issuer?: string | undefined;
             Precision?: number | undefined;
             Description?: string | undefined;
-        } & { [K_11 in Exclude<keyof I_1["Denom1"], keyof Denom>]: never; }) | undefined;
+        } & { [K_12 in Exclude<keyof I_1["Denom1"], keyof Denom>]: never; }) | undefined;
         Denom2?: ({
             Currency?: {
                 Symbol?: string | undefined;
@@ -377,15 +409,22 @@ export declare const Trade: {
             } & {
                 Symbol?: string | undefined;
                 Version?: string | undefined;
-            } & { [K_12 in Exclude<keyof I_1["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+            } & { [K_13 in Exclude<keyof I_1["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
             Subunit?: string | undefined;
             Issuer?: string | undefined;
             Precision?: number | undefined;
             Description?: string | undefined;
-        } & { [K_13 in Exclude<keyof I_1["Denom2"], keyof Denom>]: never; }) | undefined;
+        } & { [K_14 in Exclude<keyof I_1["Denom2"], keyof Denom>]: never; }) | undefined;
         Side?: Side | undefined;
         BlockTime?: Date | undefined;
         OrganizationID?: string | undefined;
+        Receiver?: ({
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } & {
+            Address?: string | undefined;
+            Type?: ReceiverType | undefined;
+        } & { [K_15 in Exclude<keyof I_1["Receiver"], keyof Receiver>]: never; }) | undefined;
         MetaData?: ({
             Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
             UpdatedAt?: Date | undefined;
@@ -396,7 +435,7 @@ export declare const Trade: {
             UpdatedAt?: Date | undefined;
             CreatedAt?: Date | undefined;
             UpdatedByAccount?: string | undefined;
-        } & { [K_14 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
+        } & { [K_16 in Exclude<keyof I_1["MetaData"], keyof MetaData>]: never; }) | undefined;
         TXID?: string | undefined;
         BlockHeight?: number | undefined;
         Enriched?: boolean | undefined;
@@ -414,7 +453,7 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_15 in Exclude<keyof I_1["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_17 in Exclude<keyof I_1["RequestedQty"], keyof Decimal>]: never; }) | undefined;
         LimitPrice?: number | undefined;
         FilledQty?: ({
             Value?: number | undefined;
@@ -422,9 +461,9 @@ export declare const Trade: {
         } & {
             Value?: number | undefined;
             Exp?: number | undefined;
-        } & { [K_16 in Exclude<keyof I_1["FilledQty"], keyof Decimal>]: never; }) | undefined;
+        } & { [K_18 in Exclude<keyof I_1["FilledQty"], keyof Decimal>]: never; }) | undefined;
         FilledAvgPrice?: number | undefined;
-    } & { [K_17 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
+    } & { [K_19 in Exclude<keyof I_1, keyof Trade>]: never; }>(object: I_1): Trade;
 };
 export declare const Trades: {
     encode(message: Trades, writer?: _m0.Writer): _m0.Writer;
@@ -464,6 +503,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -526,6 +569,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -585,6 +632,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -671,6 +722,13 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: ({
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } & {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } & { [K_5 in Exclude<keyof I["Trades"][number]["Receiver"], keyof Receiver>]: never; }) | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -681,7 +739,7 @@ export declare const Trades: {
                 UpdatedAt?: Date | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedByAccount?: string | undefined;
-            } & { [K_5 in Exclude<keyof I["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
+            } & { [K_6 in Exclude<keyof I["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             TXID?: string | undefined;
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
@@ -699,7 +757,7 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_6 in Exclude<keyof I["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_7 in Exclude<keyof I["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
             LimitPrice?: number | undefined;
             FilledQty?: ({
                 Value?: number | undefined;
@@ -707,9 +765,9 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_7 in Exclude<keyof I["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_8 in Exclude<keyof I["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
             FilledAvgPrice?: number | undefined;
-        } & { [K_8 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_9 in Exclude<keyof I["Trades"], keyof {
+        } & { [K_9 in Exclude<keyof I["Trades"][number], keyof Trade>]: never; })[] & { [K_10 in Exclude<keyof I["Trades"], keyof {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
             Sequence?: number | undefined;
@@ -741,6 +799,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -770,7 +832,7 @@ export declare const Trades: {
             FilledAvgPrice?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_10 in Exclude<keyof I, keyof Trades>]: never; }>(base?: I | undefined): Trades;
+    } & { [K_11 in Exclude<keyof I, keyof Trades>]: never; }>(base?: I | undefined): Trades;
     fromPartial<I_1 extends {
         Trades?: {
             UserID?: string | undefined;
@@ -804,6 +866,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -866,6 +932,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -925,6 +995,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -962,7 +1036,7 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_11 in Exclude<keyof I_1["Trades"][number]["Amount"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_12 in Exclude<keyof I_1["Trades"][number]["Amount"], keyof Decimal>]: never; }) | undefined;
             Price?: number | undefined;
             Denom1?: ({
                 Currency?: {
@@ -980,12 +1054,12 @@ export declare const Trades: {
                 } & {
                     Symbol?: string | undefined;
                     Version?: string | undefined;
-                } & { [K_12 in Exclude<keyof I_1["Trades"][number]["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+                } & { [K_13 in Exclude<keyof I_1["Trades"][number]["Denom1"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
                 Subunit?: string | undefined;
                 Issuer?: string | undefined;
                 Precision?: number | undefined;
                 Description?: string | undefined;
-            } & { [K_13 in Exclude<keyof I_1["Trades"][number]["Denom1"], keyof Denom>]: never; }) | undefined;
+            } & { [K_14 in Exclude<keyof I_1["Trades"][number]["Denom1"], keyof Denom>]: never; }) | undefined;
             Denom2?: ({
                 Currency?: {
                     Symbol?: string | undefined;
@@ -1002,15 +1076,22 @@ export declare const Trades: {
                 } & {
                     Symbol?: string | undefined;
                     Version?: string | undefined;
-                } & { [K_14 in Exclude<keyof I_1["Trades"][number]["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
+                } & { [K_15 in Exclude<keyof I_1["Trades"][number]["Denom2"]["Currency"], keyof import("./sologenic/com-fs-asset-model/domain/currency/currency").Currency>]: never; }) | undefined;
                 Subunit?: string | undefined;
                 Issuer?: string | undefined;
                 Precision?: number | undefined;
                 Description?: string | undefined;
-            } & { [K_15 in Exclude<keyof I_1["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
+            } & { [K_16 in Exclude<keyof I_1["Trades"][number]["Denom2"], keyof Denom>]: never; }) | undefined;
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: ({
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } & {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } & { [K_17 in Exclude<keyof I_1["Trades"][number]["Receiver"], keyof Receiver>]: never; }) | undefined;
             MetaData?: ({
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -1021,7 +1102,7 @@ export declare const Trades: {
                 UpdatedAt?: Date | undefined;
                 CreatedAt?: Date | undefined;
                 UpdatedByAccount?: string | undefined;
-            } & { [K_16 in Exclude<keyof I_1["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
+            } & { [K_18 in Exclude<keyof I_1["Trades"][number]["MetaData"], keyof MetaData>]: never; }) | undefined;
             TXID?: string | undefined;
             BlockHeight?: number | undefined;
             Enriched?: boolean | undefined;
@@ -1039,7 +1120,7 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_17 in Exclude<keyof I_1["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_19 in Exclude<keyof I_1["Trades"][number]["RequestedQty"], keyof Decimal>]: never; }) | undefined;
             LimitPrice?: number | undefined;
             FilledQty?: ({
                 Value?: number | undefined;
@@ -1047,9 +1128,9 @@ export declare const Trades: {
             } & {
                 Value?: number | undefined;
                 Exp?: number | undefined;
-            } & { [K_18 in Exclude<keyof I_1["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
+            } & { [K_20 in Exclude<keyof I_1["Trades"][number]["FilledQty"], keyof Decimal>]: never; }) | undefined;
             FilledAvgPrice?: number | undefined;
-        } & { [K_19 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_20 in Exclude<keyof I_1["Trades"], keyof {
+        } & { [K_21 in Exclude<keyof I_1["Trades"][number], keyof Trade>]: never; })[] & { [K_22 in Exclude<keyof I_1["Trades"], keyof {
             UserID?: string | undefined;
             OrderKey?: string | undefined;
             Sequence?: number | undefined;
@@ -1081,6 +1162,10 @@ export declare const Trades: {
             Side?: Side | undefined;
             BlockTime?: Date | undefined;
             OrganizationID?: string | undefined;
+            Receiver?: {
+                Address?: string | undefined;
+                Type?: ReceiverType | undefined;
+            } | undefined;
             MetaData?: {
                 Network?: import("./sologenic/com-fs-utils-lib/models/metadata/metadata").Network | undefined;
                 UpdatedAt?: Date | undefined;
@@ -1110,7 +1195,27 @@ export declare const Trades: {
             FilledAvgPrice?: number | undefined;
         }[]>]: never; }) | undefined;
         Offset?: number | undefined;
-    } & { [K_21 in Exclude<keyof I_1, keyof Trades>]: never; }>(object: I_1): Trades;
+    } & { [K_23 in Exclude<keyof I_1, keyof Trades>]: never; }>(object: I_1): Trades;
+};
+export declare const Receiver: {
+    encode(message: Receiver, writer?: _m0.Writer): _m0.Writer;
+    decode(input: _m0.Reader | Uint8Array, length?: number): Receiver;
+    fromJSON(object: any): Receiver;
+    toJSON(message: Receiver): unknown;
+    create<I extends {
+        Address?: string | undefined;
+        Type?: ReceiverType | undefined;
+    } & {
+        Address?: string | undefined;
+        Type?: ReceiverType | undefined;
+    } & { [K in Exclude<keyof I, keyof Receiver>]: never; }>(base?: I | undefined): Receiver;
+    fromPartial<I_1 extends {
+        Address?: string | undefined;
+        Type?: ReceiverType | undefined;
+    } & {
+        Address?: string | undefined;
+        Type?: ReceiverType | undefined;
+    } & { [K_1 in Exclude<keyof I_1, keyof Receiver>]: never; }>(object: I_1): Receiver;
 };
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 export type DeepPartial<T> = T extends Builtin ? T : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {
