@@ -9,10 +9,9 @@ import _m0 from "protobufjs/minimal";
 import { Timestamp } from "./google/protobuf/timestamp";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
 import { tradeTypeFromJSON, tradeTypeToJSON } from "./sologenic/com-fs-order-model/broker";
-import { timeInForceFromJSON, timeInForceToJSON } from "./sologenic/com-fs-order-model/util";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
-import { sideFromJSON, sideToJSON } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
+import { sideFromJSON, sideToJSON, timeInForceFromJSON, timeInForceToJSON, } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export const protobufPackage = "trade";
 export var ActivityType;
 (function (ActivityType) {

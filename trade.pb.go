@@ -234,10 +234,10 @@ type Trade struct {
 	// eliminating the need for separate Trade and Order queries on the frontend. Therefore, this field is to be used only when creating indexes in Elasticsearch.
 	Status *Status `protobuf:"varint,35,opt,name=Status,proto3,enum=trade.Status,oneof" json:"Status,omitempty"`
 	// USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
-	USD         *float32                        `protobuf:"fixed32,40,opt,name=USD,proto3,oneof" json:"USD,omitempty"`                                       // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
-	TradeType   *com_fs_order_model.TradeType   `protobuf:"varint,41,opt,name=TradeType,proto3,enum=order.TradeType,oneof" json:"TradeType,omitempty"`       // The type of the trade, e.g. limit, market, etc.
-	Commission  *float64                        `protobuf:"fixed64,42,opt,name=Commission,proto3,oneof" json:"Commission,omitempty"`                         // The commission paid to the brokerage
-	TimeInForce *com_fs_order_model.TimeInForce `protobuf:"varint,43,opt,name=TimeInForce,proto3,enum=order.TimeInForce,oneof" json:"TimeInForce,omitempty"` // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+	USD         *float32                      `protobuf:"fixed32,40,opt,name=USD,proto3,oneof" json:"USD,omitempty"`                                                 // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+	TradeType   *com_fs_order_model.TradeType `protobuf:"varint,41,opt,name=TradeType,proto3,enum=order.TradeType,oneof" json:"TradeType,omitempty"`                 // The type of the trade, e.g. limit, market, etc.
+	Commission  *float64                      `protobuf:"fixed64,42,opt,name=Commission,proto3,oneof" json:"Commission,omitempty"`                                   // The commission paid to the brokerage
+	TimeInForce *order_properties.TimeInForce `protobuf:"varint,43,opt,name=TimeInForce,proto3,enum=orderproperties.TimeInForce,oneof" json:"TimeInForce,omitempty"` // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
 	// Type of activity that the order represents, e.g. deposit, withdrawal, etc.
 	// Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
 	ActivityType *ActivityType `protobuf:"varint,44,opt,name=ActivityType,proto3,enum=trade.ActivityType,oneof" json:"ActivityType,omitempty"`
@@ -425,11 +425,11 @@ func (x *Trade) GetCommission() float64 {
 	return 0
 }
 
-func (x *Trade) GetTimeInForce() com_fs_order_model.TimeInForce {
+func (x *Trade) GetTimeInForce() order_properties.TimeInForce {
 	if x != nil && x.TimeInForce != nil {
 		return *x.TimeInForce
 	}
-	return com_fs_order_model.TimeInForce(0)
+	return order_properties.TimeInForce(0)
 }
 
 func (x *Trade) GetActivityType() ActivityType {
@@ -582,7 +582,7 @@ var File_trade_proto protoreflect.FileDescriptor
 
 const file_trade_proto_rawDesc = "" +
 	"\n" +
-	"\vtrade.proto\x12\x05trade\x1a\x1fgoogle/protobuf/timestamp.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a5sologenic/com-fs-asset-model/domain/denom/denom.proto\x1a3sologenic/com-fs-utils-lib/go/decimal/decimal.proto\x1a)sologenic/com-fs-order-model/broker.proto\x1a'sologenic/com-fs-order-model/util.proto\"\xf5\t\n" +
+	"\vtrade.proto\x12\x05trade\x1a\x1fgoogle/protobuf/timestamp.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a5sologenic/com-fs-asset-model/domain/denom/denom.proto\x1a3sologenic/com-fs-utils-lib/go/decimal/decimal.proto\x1a)sologenic/com-fs-order-model/broker.proto\"\xff\t\n" +
 	"\x05Trade\x12\x16\n" +
 	"\x06UserID\x18\x01 \x01(\tR\x06UserID\x12\x1f\n" +
 	"\bOrderKey\x18\x02 \x01(\tH\x00R\bOrderKey\x88\x01\x01\x12\x1a\n" +
@@ -606,8 +606,8 @@ const file_trade_proto_rawDesc = "" +
 	"\tTradeType\x18) \x01(\x0e2\x10.order.TradeTypeH\x05R\tTradeType\x88\x01\x01\x12#\n" +
 	"\n" +
 	"Commission\x18* \x01(\x01H\x06R\n" +
-	"Commission\x88\x01\x01\x129\n" +
-	"\vTimeInForce\x18+ \x01(\x0e2\x12.order.TimeInForceH\aR\vTimeInForce\x88\x01\x01\x12<\n" +
+	"Commission\x88\x01\x01\x12C\n" +
+	"\vTimeInForce\x18+ \x01(\x0e2\x1c.orderproperties.TimeInForceH\aR\vTimeInForce\x88\x01\x01\x12<\n" +
 	"\fActivityType\x18, \x01(\x0e2\x13.trade.ActivityTypeH\bR\fActivityType\x88\x01\x01\x12\x1a\n" +
 	"\bInverted\x182 \x01(\bR\bInverted\x129\n" +
 	"\fRequestedQty\x183 \x01(\v2\x10.decimal.DecimalH\tR\fRequestedQty\x88\x01\x01\x12#\n" +
@@ -683,19 +683,19 @@ func file_trade_proto_rawDescGZIP() []byte {
 var file_trade_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_trade_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_trade_proto_goTypes = []any{
-	(ActivityType)(0),                   // 0: trade.ActivityType
-	(ReceiverType)(0),                   // 1: trade.ReceiverType
-	(Status)(0),                         // 2: trade.Status
-	(*Trade)(nil),                       // 3: trade.Trade
-	(*Trades)(nil),                      // 4: trade.Trades
-	(*Receiver)(nil),                    // 5: trade.Receiver
-	(*decimal.Decimal)(nil),             // 6: decimal.Decimal
-	(*denom.Denom)(nil),                 // 7: denom.Denom
-	(order_properties.Side)(0),          // 8: orderproperties.Side
-	(*timestamppb.Timestamp)(nil),       // 9: google.protobuf.Timestamp
-	(*metadata.MetaData)(nil),           // 10: metadata.MetaData
-	(com_fs_order_model.TradeType)(0),   // 11: order.TradeType
-	(com_fs_order_model.TimeInForce)(0), // 12: order.TimeInForce
+	(ActivityType)(0),                 // 0: trade.ActivityType
+	(ReceiverType)(0),                 // 1: trade.ReceiverType
+	(Status)(0),                       // 2: trade.Status
+	(*Trade)(nil),                     // 3: trade.Trade
+	(*Trades)(nil),                    // 4: trade.Trades
+	(*Receiver)(nil),                  // 5: trade.Receiver
+	(*decimal.Decimal)(nil),           // 6: decimal.Decimal
+	(*denom.Denom)(nil),               // 7: denom.Denom
+	(order_properties.Side)(0),        // 8: orderproperties.Side
+	(*timestamppb.Timestamp)(nil),     // 9: google.protobuf.Timestamp
+	(*metadata.MetaData)(nil),         // 10: metadata.MetaData
+	(com_fs_order_model.TradeType)(0), // 11: order.TradeType
+	(order_properties.TimeInForce)(0), // 12: orderproperties.TimeInForce
 }
 var file_trade_proto_depIdxs = []int32{
 	6,  // 0: trade.Trade.Amount:type_name -> decimal.Decimal
@@ -707,7 +707,7 @@ var file_trade_proto_depIdxs = []int32{
 	10, // 6: trade.Trade.MetaData:type_name -> metadata.MetaData
 	2,  // 7: trade.Trade.Status:type_name -> trade.Status
 	11, // 8: trade.Trade.TradeType:type_name -> order.TradeType
-	12, // 9: trade.Trade.TimeInForce:type_name -> order.TimeInForce
+	12, // 9: trade.Trade.TimeInForce:type_name -> orderproperties.TimeInForce
 	0,  // 10: trade.Trade.ActivityType:type_name -> trade.ActivityType
 	6,  // 11: trade.Trade.RequestedQty:type_name -> decimal.Decimal
 	6,  // 12: trade.Trade.FilledQty:type_name -> decimal.Decimal

@@ -20,7 +20,7 @@ import {
   TimeInForce,
   timeInForceFromJSON,
   timeInForceToJSON,
-} from "./util";
+} from "../com-fs-utils-lib/models/order-properties/order-properties";
 
 export const protobufPackage = "order";
 

@@ -1,10 +1,9 @@
 import _m0 from "protobufjs/minimal";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
 import { TradeType } from "./sologenic/com-fs-order-model/broker";
-import { TimeInForce } from "./sologenic/com-fs-order-model/util";
 import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
-import { Side } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
+import { Side, TimeInForce } from "./sologenic/com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "trade";
 export declare enum ActivityType {
     NOT_USED_ACTIVITY_TYPE = 0,

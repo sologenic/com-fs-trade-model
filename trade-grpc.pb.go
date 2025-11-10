@@ -29,21 +29,21 @@ const (
 
 // Ability to get all trade history views using the filter options
 type Filter struct {
-	state          protoimpl.MessageState          `protogen:"open.v1"`
-	Network        metadata.Network                `protobuf:"varint,1,opt,name=Network,proto3,enum=metadata.Network" json:"Network,omitempty"`
-	From           *timestamppb.Timestamp          `protobuf:"bytes,2,opt,name=From,proto3,oneof" json:"From,omitempty"`
-	To             *timestamppb.Timestamp          `protobuf:"bytes,3,opt,name=To,proto3,oneof" json:"To,omitempty"`
-	Sequence       *int64                          `protobuf:"varint,4,opt,name=Sequence,proto3,oneof" json:"Sequence,omitempty"`
-	OrderKey       *string                         `protobuf:"bytes,5,opt,name=OrderKey,proto3,oneof" json:"OrderKey,omitempty"` // Datastore key
-	TXID           *string                         `protobuf:"bytes,6,opt,name=TXID,proto3,oneof" json:"TXID,omitempty"`
-	Denom1         *denom.Denom                    `protobuf:"bytes,7,opt,name=Denom1,proto3,oneof" json:"Denom1,omitempty"`
-	Denom2         *denom.Denom                    `protobuf:"bytes,8,opt,name=Denom2,proto3,oneof" json:"Denom2,omitempty"`
-	Side           *order_properties.Side          `protobuf:"varint,9,opt,name=Side,proto3,enum=orderproperties.Side,oneof" json:"Side,omitempty"`
-	OrganizationID string                          `protobuf:"bytes,10,opt,name=OrganizationID,proto3" json:"OrganizationID,omitempty"`
-	UserID         *string                         `protobuf:"bytes,11,opt,name=UserID,proto3,oneof" json:"UserID,omitempty"`                                   // User ID for the trade
-	TradeType      *com_fs_order_model.TradeType   `protobuf:"varint,12,opt,name=TradeType,proto3,enum=order.TradeType,oneof" json:"TradeType,omitempty"`       // The type of the trade, e.g. limit, market, etc.
-	TimeInForce    *com_fs_order_model.TimeInForce `protobuf:"varint,13,opt,name=TimeInForce,proto3,enum=order.TimeInForce,oneof" json:"TimeInForce,omitempty"` // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
-	Limit          *int32                          `protobuf:"varint,14,opt,name=Limit,proto3,oneof" json:"Limit,omitempty"`
+	state          protoimpl.MessageState        `protogen:"open.v1"`
+	Network        metadata.Network              `protobuf:"varint,1,opt,name=Network,proto3,enum=metadata.Network" json:"Network,omitempty"`
+	From           *timestamppb.Timestamp        `protobuf:"bytes,2,opt,name=From,proto3,oneof" json:"From,omitempty"`
+	To             *timestamppb.Timestamp        `protobuf:"bytes,3,opt,name=To,proto3,oneof" json:"To,omitempty"`
+	Sequence       *int64                        `protobuf:"varint,4,opt,name=Sequence,proto3,oneof" json:"Sequence,omitempty"`
+	OrderKey       *string                       `protobuf:"bytes,5,opt,name=OrderKey,proto3,oneof" json:"OrderKey,omitempty"` // Datastore key
+	TXID           *string                       `protobuf:"bytes,6,opt,name=TXID,proto3,oneof" json:"TXID,omitempty"`
+	Denom1         *denom.Denom                  `protobuf:"bytes,7,opt,name=Denom1,proto3,oneof" json:"Denom1,omitempty"`
+	Denom2         *denom.Denom                  `protobuf:"bytes,8,opt,name=Denom2,proto3,oneof" json:"Denom2,omitempty"`
+	Side           *order_properties.Side        `protobuf:"varint,9,opt,name=Side,proto3,enum=orderproperties.Side,oneof" json:"Side,omitempty"`
+	OrganizationID string                        `protobuf:"bytes,10,opt,name=OrganizationID,proto3" json:"OrganizationID,omitempty"`
+	UserID         *string                       `protobuf:"bytes,11,opt,name=UserID,proto3,oneof" json:"UserID,omitempty"`                                             // User ID for the trade
+	TradeType      *com_fs_order_model.TradeType `protobuf:"varint,12,opt,name=TradeType,proto3,enum=order.TradeType,oneof" json:"TradeType,omitempty"`                 // The type of the trade, e.g. limit, market, etc.
+	TimeInForce    *order_properties.TimeInForce `protobuf:"varint,13,opt,name=TimeInForce,proto3,enum=orderproperties.TimeInForce,oneof" json:"TimeInForce,omitempty"` // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+	Limit          *int32                        `protobuf:"varint,14,opt,name=Limit,proto3,oneof" json:"Limit,omitempty"`
 	// Use for batch queries (with IN operator) instead of Denom1/Denom2
 	Denom1Symbols []string      `protobuf:"bytes,15,rep,name=Denom1Symbols,proto3" json:"Denom1Symbols,omitempty"`                              // List of Denom1 symbols to filter trades
 	Denom2Symbols []string      `protobuf:"bytes,16,rep,name=Denom2Symbols,proto3" json:"Denom2Symbols,omitempty"`                              // List of Denom2 symbols to filter trades
@@ -166,11 +166,11 @@ func (x *Filter) GetTradeType() com_fs_order_model.TradeType {
 	return com_fs_order_model.TradeType(0)
 }
 
-func (x *Filter) GetTimeInForce() com_fs_order_model.TimeInForce {
+func (x *Filter) GetTimeInForce() order_properties.TimeInForce {
 	if x != nil && x.TimeInForce != nil {
 		return *x.TimeInForce
 	}
-	return com_fs_order_model.TimeInForce(0)
+	return order_properties.TimeInForce(0)
 }
 
 func (x *Filter) GetLimit() int32 {
@@ -265,7 +265,7 @@ var File_trade_grpc_proto protoreflect.FileDescriptor
 
 const file_trade_grpc_proto_rawDesc = "" +
 	"\n" +
-	"\x10trade-grpc.proto\x12\x05trade\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a5sologenic/com-fs-asset-model/domain/denom/denom.proto\x1a)sologenic/com-fs-order-model/broker.proto\x1a'sologenic/com-fs-order-model/util.proto\x1a\vtrade.proto\"\xec\x06\n" +
+	"\x10trade-grpc.proto\x12\x05trade\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1aIsologenic/com-fs-utils-lib/models/order-properties/order-properties.proto\x1a9sologenic/com-fs-utils-lib/models/metadata/metadata.proto\x1a5sologenic/com-fs-asset-model/domain/denom/denom.proto\x1a)sologenic/com-fs-order-model/broker.proto\x1a\vtrade.proto\"\xf6\x06\n" +
 	"\x06Filter\x12+\n" +
 	"\aNetwork\x18\x01 \x01(\x0e2\x11.metadata.NetworkR\aNetwork\x123\n" +
 	"\x04From\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\x04From\x88\x01\x01\x12/\n" +
@@ -279,8 +279,8 @@ const file_trade_grpc_proto_rawDesc = "" +
 	"\x0eOrganizationID\x18\n" +
 	" \x01(\tR\x0eOrganizationID\x12\x1b\n" +
 	"\x06UserID\x18\v \x01(\tH\bR\x06UserID\x88\x01\x01\x123\n" +
-	"\tTradeType\x18\f \x01(\x0e2\x10.order.TradeTypeH\tR\tTradeType\x88\x01\x01\x129\n" +
-	"\vTimeInForce\x18\r \x01(\x0e2\x12.order.TimeInForceH\n" +
+	"\tTradeType\x18\f \x01(\x0e2\x10.order.TradeTypeH\tR\tTradeType\x88\x01\x01\x12C\n" +
+	"\vTimeInForce\x18\r \x01(\x0e2\x1c.orderproperties.TimeInForceH\n" +
 	"R\vTimeInForce\x88\x01\x01\x12\x19\n" +
 	"\x05Limit\x18\x0e \x01(\x05H\vR\x05Limit\x88\x01\x01\x12$\n" +
 	"\rDenom1Symbols\x18\x0f \x03(\tR\rDenom1Symbols\x12$\n" +
@@ -324,18 +324,18 @@ func file_trade_grpc_proto_rawDescGZIP() []byte {
 
 var file_trade_grpc_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_trade_grpc_proto_goTypes = []any{
-	(*Filter)(nil),                      // 0: trade.Filter
-	(*TradeKey)(nil),                    // 1: trade.TradeKey
-	(metadata.Network)(0),               // 2: metadata.Network
-	(*timestamppb.Timestamp)(nil),       // 3: google.protobuf.Timestamp
-	(*denom.Denom)(nil),                 // 4: denom.Denom
-	(order_properties.Side)(0),          // 5: orderproperties.Side
-	(com_fs_order_model.TradeType)(0),   // 6: order.TradeType
-	(com_fs_order_model.TimeInForce)(0), // 7: order.TimeInForce
-	(ActivityType)(0),                   // 8: trade.ActivityType
-	(*Trade)(nil),                       // 9: trade.Trade
-	(*Trades)(nil),                      // 10: trade.Trades
-	(*emptypb.Empty)(nil),               // 11: google.protobuf.Empty
+	(*Filter)(nil),                    // 0: trade.Filter
+	(*TradeKey)(nil),                  // 1: trade.TradeKey
+	(metadata.Network)(0),             // 2: metadata.Network
+	(*timestamppb.Timestamp)(nil),     // 3: google.protobuf.Timestamp
+	(*denom.Denom)(nil),               // 4: denom.Denom
+	(order_properties.Side)(0),        // 5: orderproperties.Side
+	(com_fs_order_model.TradeType)(0), // 6: order.TradeType
+	(order_properties.TimeInForce)(0), // 7: orderproperties.TimeInForce
+	(ActivityType)(0),                 // 8: trade.ActivityType
+	(*Trade)(nil),                     // 9: trade.Trade
+	(*Trades)(nil),                    // 10: trade.Trades
+	(*emptypb.Empty)(nil),             // 11: google.protobuf.Empty
 }
 var file_trade_grpc_proto_depIdxs = []int32{
 	2,  // 0: trade.Filter.Network:type_name -> metadata.Network
@@ -345,7 +345,7 @@ var file_trade_grpc_proto_depIdxs = []int32{
 	4,  // 4: trade.Filter.Denom2:type_name -> denom.Denom
 	5,  // 5: trade.Filter.Side:type_name -> orderproperties.Side
 	6,  // 6: trade.Filter.TradeType:type_name -> order.TradeType
-	7,  // 7: trade.Filter.TimeInForce:type_name -> order.TimeInForce
+	7,  // 7: trade.Filter.TimeInForce:type_name -> orderproperties.TimeInForce
 	8,  // 8: trade.Filter.ActivityType:type_name -> trade.ActivityType
 	2,  // 9: trade.TradeKey.Network:type_name -> metadata.Network
 	1,  // 10: trade.TradeService.Get:input_type -> trade.TradeKey

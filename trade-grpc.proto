@@ -10,7 +10,6 @@ import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.prot
 import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
 import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
 import "sologenic/com-fs-order-model/broker.proto";
-import "sologenic/com-fs-order-model/util.proto";
 import "trade.proto";
 
 service TradeService {
@@ -34,7 +33,7 @@ message Filter {
     string OrganizationID = 10;
     optional string UserID = 11; // User ID for the trade
     optional order.TradeType TradeType = 12; // The type of the trade, e.g. limit, market, etc.
-    optional order.TimeInForce TimeInForce = 13; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+    optional orderproperties.TimeInForce TimeInForce = 13; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
     optional int32 Limit = 14;
     // Use for batch queries (with IN operator) instead of Denom1/Denom2
     repeated string Denom1Symbols = 15; // List of Denom1 symbols to filter trades
