@@ -33,6 +33,8 @@ export var ActivityType;
     ActivityType[ActivityType["SENT"] = 7] = "SENT";
     /** SUBSCRIPTION - Subscription to a service or product */
     ActivityType[ActivityType["SUBSCRIPTION"] = 8] = "SUBSCRIPTION";
+    /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawals */
+    ActivityType[ActivityType["USDC_USD_CONVERSION"] = 9] = "USDC_USD_CONVERSION";
     ActivityType[ActivityType["UNRECOGNIZED"] = -1] = "UNRECOGNIZED";
 })(ActivityType || (ActivityType = {}));
 export function activityTypeFromJSON(object) {
@@ -64,6 +66,9 @@ export function activityTypeFromJSON(object) {
         case 8:
         case "SUBSCRIPTION":
             return ActivityType.SUBSCRIPTION;
+        case 9:
+        case "USDC_USD_CONVERSION":
+            return ActivityType.USDC_USD_CONVERSION;
         case -1:
         case "UNRECOGNIZED":
         default:
@@ -90,6 +95,8 @@ export function activityTypeToJSON(object) {
             return "SENT";
         case ActivityType.SUBSCRIPTION:
             return "SUBSCRIPTION";
+        case ActivityType.USDC_USD_CONVERSION:
+            return "USDC_USD_CONVERSION";
         case ActivityType.UNRECOGNIZED:
         default:
             return "UNRECOGNIZED";

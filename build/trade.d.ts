@@ -24,6 +24,8 @@ export declare enum ActivityType {
     SENT = 7,
     /** SUBSCRIPTION - Subscription to a service or product */
     SUBSCRIPTION = 8,
+    /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawals */
+    USDC_USD_CONVERSION = 9,
     UNRECOGNIZED = -1
 }
 export declare function activityTypeFromJSON(object: any): ActivityType;

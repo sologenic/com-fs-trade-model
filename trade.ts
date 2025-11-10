@@ -35,6 +35,8 @@ export enum ActivityType {
   SENT = 7,
   /** SUBSCRIPTION - Subscription to a service or product */
   SUBSCRIPTION = 8,
+  /** USDC_USD_CONVERSION - Conversion of USDC to USD for deposit/withdrawals */
+  USDC_USD_CONVERSION = 9,
   UNRECOGNIZED = -1,
 }
 
@@ -67,6 +69,9 @@ export function activityTypeFromJSON(object: any): ActivityType {
     case 8:
     case "SUBSCRIPTION":
       return ActivityType.SUBSCRIPTION;
+    case 9:
+    case "USDC_USD_CONVERSION":
+      return ActivityType.USDC_USD_CONVERSION;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -94,6 +99,8 @@ export function activityTypeToJSON(object: ActivityType): string {
       return "SENT";
     case ActivityType.SUBSCRIPTION:
       return "SUBSCRIPTION";
+    case ActivityType.USDC_USD_CONVERSION:
+      return "USDC_USD_CONVERSION";
     case ActivityType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";

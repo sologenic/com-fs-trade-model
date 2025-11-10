@@ -70,6 +70,7 @@ enum ActivityType {
     RECEIVED = 6; // Received funds from another account
     SENT = 7; // Sent funds from this account to another account
     SUBSCRIPTION = 8; // Subscription to a service or product
+    USDC_USD_CONVERSION = 9; // Conversion of USDC to USD for deposit/withdrawals
 }
 
 message Trades {

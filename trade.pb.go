@@ -39,6 +39,7 @@ const (
 	ActivityType_RECEIVED               ActivityType = 6 // Received funds from another account
 	ActivityType_SENT                   ActivityType = 7 // Sent funds from this account to another account
 	ActivityType_SUBSCRIPTION           ActivityType = 8 // Subscription to a service or product
+	ActivityType_USDC_USD_CONVERSION    ActivityType = 9 // Conversion of USDC to USD for deposit/withdrawals
 )
 
 // Enum value maps for ActivityType.
@@ -53,6 +54,7 @@ var (
 		6: "RECEIVED",
 		7: "SENT",
 		8: "SUBSCRIPTION",
+		9: "USDC_USD_CONVERSION",
 	}
 	ActivityType_value = map[string]int32{
 		"NOT_USED_ACTIVITY_TYPE": 0,
@@ -64,6 +66,7 @@ var (
 		"RECEIVED":               6,
 		"SENT":                   7,
 		"SUBSCRIPTION":           8,
+		"USDC_USD_CONVERSION":    9,
 	}
 )
 
@@ -635,7 +638,7 @@ const file_trade_proto_rawDesc = "" +
 	"\a_Offset\"M\n" +
 	"\bReceiver\x12\x18\n" +
 	"\aAddress\x18\x01 \x01(\tR\aAddress\x12'\n" +
-	"\x04Type\x18\x02 \x01(\x0e2\x13.trade.ReceiverTypeR\x04Type*\x98\x01\n" +
+	"\x04Type\x18\x02 \x01(\x0e2\x13.trade.ReceiverTypeR\x04Type*\xb1\x01\n" +
 	"\fActivityType\x12\x1a\n" +
 	"\x16NOT_USED_ACTIVITY_TYPE\x10\x00\x12\t\n" +
 	"\x05ORDER\x10\x01\x12\v\n" +
@@ -646,7 +649,8 @@ const file_trade_proto_rawDesc = "" +
 	"\bINTEREST\x10\x05\x12\f\n" +
 	"\bRECEIVED\x10\x06\x12\b\n" +
 	"\x04SENT\x10\a\x12\x10\n" +
-	"\fSUBSCRIPTION\x10\b*;\n" +
+	"\fSUBSCRIPTION\x10\b\x12\x17\n" +
+	"\x13USDC_USD_CONVERSION\x10\t*;\n" +
 	"\fReceiverType\x12\t\n" +
 	"\x05EMAIL\x10\x00\x12\x06\n" +
 	"\x02TX\x10\x01\x12\f\n" +
