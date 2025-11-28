@@ -12,12 +12,12 @@
 
 ## Overview
 
-The Trade provides a comprehensive data structure for managing trade within the system. This model supports identification: provides unique identifiers for trade, organizational context: links items to organizations via organizationid, metadata and audit: includes metadata and audit trails for tracking changes, and more. 
+The Trade provides a comprehensive data structure for managing trade within the system. This model supports organizational context: links items to organizations via organizationid, metadata and audit: includes metadata and audit trails for tracking changes, identification: provides unique identifiers for trade, and more. 
 
 Key features of the {model_name.lower()} model include:
-- **Identification**: Provides unique identifiers for trade
 - **Organizational Context**: Links items to organizations via OrganizationID
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
+- **Identification**: Provides unique identifiers for trade
 - **Status Management**: Tracks status for administrative control
 
 ## trade.proto
@@ -41,27 +41,13 @@ The `Trade` message provides trade data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| Denom2 | `denom.Denom` | Required | Denom2 field |
-| Side | `orderproperties.Side` | Required | Unique identifier for the side |
-| BlockTime | `google.protobuf.Timestamp` | Required | BlockTime field |
 | OrganizationID | `string` | Required | UUID of the organization this item belongs to |
-| Receiver | `Receiver` | Optional | Receiver field |
 | MetaData | `metadata.MetaData` | Required | Metadata information including network and version details |
 | TXID | `string` | Optional | Unique identifier for the tx |
 | BlockHeight | `int64` | Required | BlockHeight field |
-| Enriched | `bool` | Required | Enriched field |
-| Processed | `bool` | Required | Processed field |
 | Status | `Status` | Optional | Current status of this item (see related enum) |
-| USD | `float` | Optional | USD field |
-| TradeType | `order.TradeType` | Optional | Type classification for this item (see related enum) |
-| Commission | `double` | Optional | Commission field |
-| TimeInForce | `orderproperties.TimeInForce` | Optional | TimeInForce field |
 | ActivityType | `ActivityType` | Optional | Type classification for this item (see related enum) |
 | Inverted | `bool` | Required | Inverted field |
-| RequestedQty | `decimal.Decimal` | Optional | RequestedQty field |
-| LimitPrice | `double` | Optional | LimitPrice field |
-| FilledQty | `decimal.Decimal` | Optional | FilledQty field |
-| FilledAvgPrice | `double` | Optional | FilledAvgPrice field |
 
 **Use Cases:**
 - Creating new trade records
@@ -71,7 +57,6 @@ The `Trade` message provides trade data and operations.
 - Tracking status for administrative purposes
 
 **Important Notes:**
-- The `Side` field must match a valid identifier format
 - The `OrganizationID` must be a valid UUID format
 - The `TXID` field must match a valid identifier format
 - The `Status` field determines the current state of this item
