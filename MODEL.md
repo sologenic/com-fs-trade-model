@@ -19,7 +19,7 @@
 
 The Trade provides a comprehensive data structure for managing trade within the system. This model supports identification: provides unique identifiers for trade, organizational context: links items to organizations via organizationid, metadata and audit: includes metadata and audit trails for tracking changes, and more. 
 
-Key features of the {model_name.lower()} model include:
+Key features of the trade model include:
 - **Identification**: Provides unique identifiers for trade
 - **Organizational Context**: Links items to organizations via OrganizationID
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
@@ -150,10 +150,10 @@ The `TradePair` message provides tradepair data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
-| Denom1 | `denom.Denom` | Required | Denom1 field |
-| Denom2 | `denom.Denom` | Required | Denom2 field |
+| Denom1 | `denom.Denom` | Required | Denom information |
+| Denom2 | `denom.Denom` | Required | Denom information |
 | MetaData | `metadata.MetaData` | Required | Metadata information including network and version details |
-| PriceTick | `decimal.Decimal` | Optional | PriceTick field |
+| PriceTick | `decimal.Decimal` | Optional | Decimal information |
 | QuantityStep | `int64` | Optional | QuantityStep field |
 | OrganizationID | `string` | Required | UUID of the organization this item belongs to |
 
