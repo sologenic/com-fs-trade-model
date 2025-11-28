@@ -8,6 +8,10 @@
     - [Trade](#trade)
     - [Trades](#trades)
     - [Receiver](#receiver)
+  - [Enums](#enums)
+    - [ActivityType](#activitytype)
+    - [ReceiverType](#receivertype)
+    - [Status](#status)
 - [tradepair.proto](#tradepair)
   - [Messages](#messages)
     - [TradePair](#tradepair)
@@ -128,6 +132,86 @@ The `Receiver` message provides receiver data and operations.
 
 **Important Notes:**
 - This message provides the receiver representation
+
+### Enums
+
+#### ActivityType {#activitytype}
+
+The `ActivityType` enum defines the possible states or types for trade, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_ACTIVITY_TYPE | 0 | Default/unused value (protobuf convention) |
+| ORDER | 1 | Order state or type |
+| DEPOSIT | 2 | Deposit state or type |
+| WITHDRAWAL | 3 | Withdrawal state or type |
+| DIVIDEND | 4 | Dividend state or type |
+| INTEREST | 5 | Interest state or type |
+| RECEIVED | 6 | Received state or type |
+| SENT | 7 | Sent state or type |
+| SUBSCRIPTION | 8 | Subscription state or type |
+| USDC_USD_CONVERSION | 9 | Usdc Usd Conversion state or type |
+
+**Use Cases:**
+- Setting activitytype for items
+- Filtering items by activitytype in queries
+- Enforcing business logic based on activitytype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid activitytype values should be used in production code
+- ActivityType changes should be tracked in audit trails for compliance purposes
+
+#### ReceiverType {#receivertype}
+
+The `ReceiverType` enum defines the possible states or types for trade, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| EMAIL | 0 | Default/unused value (protobuf convention) |
+| TX | 1 | Tx state or type |
+| ETHEREUM | 2 | Ethereum state or type |
+| SOLANA | 3 | Solana state or type |
+
+**Use Cases:**
+- Setting receivertype for items
+- Filtering items by receivertype in queries
+- Enforcing business logic based on receivertype
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid receivertype values should be used in production code
+- ReceiverType changes should be tracked in audit trails for compliance purposes
+
+#### Status {#status}
+
+The `Status` enum defines the possible states or types for trade, allowing for classification and state management.
+
+**Value Table:**
+
+| Value Name | Number | Description |
+|------------|--------|-------------|
+| NOT_USED_STATUS | 0 | Default/unused value (protobuf convention) |
+| PARTIALLY_FILLED | 1 | Partially Filled state or type |
+| FILLED | 2 | Filled state or type |
+| CANCELLED | 3 | Cancelled state or type |
+| PLACED | 4 | Placed state or type |
+| EXPIRED | 5 | Expired state or type |
+| PENDING | 6 | Pending state or type |
+
+**Use Cases:**
+- Setting status for items
+- Filtering items by status in queries
+- Enforcing business logic based on status
+
+**Important Notes:**
+- Values with `NOT_USED` prefix or number 0 follow protobuf conventions for default enum values and should not be actively used
+- Only valid status values should be used in production code
+- Status changes should be tracked in audit trails for compliance purposes
 
 ## tradepair.proto
 
