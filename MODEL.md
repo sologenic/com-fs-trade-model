@@ -6,7 +6,12 @@
 - [trade.proto](#trade)
   - [Messages](#messages)
     - [Trade](#trade)
+    - [Trades](#trades)
+    - [Receiver](#receiver)
 - [tradepair.proto](#tradepair)
+  - [Messages](#messages)
+    - [TradePair](#tradepair)
+    - [TradePairs](#tradepairs)
 - [Version Information](#version-information)
 - [Support](#support)
 
@@ -19,6 +24,7 @@ Key features of the {model_name.lower()} model include:
 - **Organizational Context**: Links items to organizations via OrganizationID
 - **Metadata and Audit**: Includes metadata and audit trails for tracking changes
 - **Status Management**: Tracks status for administrative control
+- **Pagination Support**: Provides offset-based pagination for collections
 
 ## trade.proto
 
@@ -41,6 +47,12 @@ The `Trade` message provides trade data and operations.
 
 | Field Name | Type | Required/Optional | Description |
 |------------|------|-------------------|-------------|
+| UserID | `string` | Required | Unique identifier for the user |
+| OrderKey | `string` | Optional | Datastore key: OrderID-SmartContractAddr-Network |
+| Sequence | `int64` | Required | The sequence number of the order, assigned by the DEX (guaranteed unique value for the order) |
+| Amount | `decimal.Decimal` | Required | Last fill quantity from the most recent fill/partial fill event |
+| Price | `double` | Required | Last fill price from the most recent fill/partial fill event |
+| Denom1 | `denom.Denom` | Required | Base currency (e.g. suwusdc_1-smartContractAddr) |
 | Denom2 | `denom.Denom` | Required | Asset denom (e.g. suaapl_1-smartContractAddr) |
 | Side | `orderproperties.Side` | Required | The buy/sell (in the context of transactions, buys are inflow of funds and sells are outflow of funds) |
 | BlockTime | `google.protobuf.Timestamp` | Required | The time the trade was executed in UTC |
@@ -71,10 +83,51 @@ The `Trade` message provides trade data and operations.
 - Tracking status for administrative purposes
 
 **Important Notes:**
+- The `UserID` field must match a valid identifier format
 - The `Side` field must match a valid identifier format
 - The `OrganizationID` must be a valid UUID format
 - The `TXID` field must match a valid identifier format
 - The `Status` field determines the current state of this item
+
+#### Trades {#trades}
+
+The `Trades` message represents a collection of trade with pagination support for handling large result sets.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Trades | `Trade` | Optional | Trades field |
+| Offset | `int32` | Optional | Offset for pagination |
+
+**Use Cases:**
+- Returning paginated lists of trade from queries or searches
+- Implementing pagination in trade listing APIs
+- Handling large trades efficiently
+- Providing continuation tokens for subsequent page requests
+
+**Important Notes:**
+- If `Offset` is not set (or is 0), it indicates that all available items have been returned
+- Clients should use the `Offset` value in subsequent requests to retrieve the next page of results
+
+#### Receiver {#receiver}
+
+The `Receiver` message provides receiver data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Address | `string` | Required | The address of the receiver, used for sending of funds. |
+| Type | `ReceiverType` | Required | The type of the receiver, e.g. email, tx address, blockchain address from another blockchain. |
+
+**Use Cases:**
+- Creating new receiver records
+- Retrieving receiver information
+- Updating receiver data
+
+**Important Notes:**
+- This message provides the receiver representation
 
 ## tradepair.proto
 
@@ -86,6 +139,53 @@ The `Trade` message provides trade data and operations.
 ### Overview
 
 The `tradepair.proto` file defines the core tradepair model for trade management. It provides message types for representing tradepair data and operations. The file integrates with external utility libraries: `metadata.proto`, `denom.proto`, `decimal.proto`.
+
+### Messages
+
+#### TradePair {#tradepair}
+
+The `TradePair` message provides tradepair data and operations.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| Denom1 | `denom.Denom` | Required | Denom1 field |
+| Denom2 | `denom.Denom` | Required | Denom2 field |
+| MetaData | `metadata.MetaData` | Required | Metadata information including network and version details |
+| PriceTick | `decimal.Decimal` | Optional | PriceTick field |
+| QuantityStep | `int64` | Optional | QuantityStep field |
+| OrganizationID | `string` | Required | UUID of the organization this item belongs to |
+
+**Use Cases:**
+- Creating new tradepair records
+- Retrieving tradepair information
+- Updating tradepair data
+- Associating items with specific organizations
+
+**Important Notes:**
+- The `OrganizationID` must be a valid UUID format
+
+#### TradePairs {#tradepairs}
+
+The `TradePairs` message represents a collection of tradepair with pagination support for handling large result sets.
+
+**Field Table:**
+
+| Field Name | Type | Required/Optional | Description |
+|------------|------|-------------------|-------------|
+| TradePairs | `TradePair` | Optional | TradePairs field |
+| Offset | `int32` | Optional | Offset field |
+
+**Use Cases:**
+- Returning paginated lists of tradepair from queries or searches
+- Implementing pagination in tradepair listing APIs
+- Handling large tradepairs efficiently
+- Providing continuation tokens for subsequent page requests
+
+**Important Notes:**
+- If `Offset` is not set (or is 0), it indicates that all available items have been returned
+- Clients should use the `Offset` value in subsequent requests to retrieve the next page of results
 
 ## Version Information
 
