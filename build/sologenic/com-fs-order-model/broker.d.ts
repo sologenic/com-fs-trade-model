@@ -1,18 +1,10 @@
 import _m0 from "protobufjs/minimal";
 import { AssetType } from "../com-fs-asset-model/asset";
-import { Decimal } from "../com-fs-utils-lib/go/decimal/decimal";
 import { CommissionSettings } from "../com-fs-utils-lib/models/commission/commission";
+import { Decimal } from "../com-fs-utils-lib/models/decimal/decimal";
 import { Network } from "../com-fs-utils-lib/models/metadata/metadata";
-import { OrderType, ProcessInfo, TimeInForce } from "../com-fs-utils-lib/models/order-properties/order-properties";
+import { ClearingBroker, OrderType, ProcessInfo, TimeInForce } from "../com-fs-utils-lib/models/order-properties/order-properties";
 export declare const protobufPackage = "order";
-export declare enum ClearingBroker {
-    NOT_USED_CLEARING_BROKER = 0,
-    ALPACA = 1,
-    RQD = 2,
-    UNRECOGNIZED = -1
-}
-export declare function clearingBrokerFromJSON(object: any): ClearingBroker;
-export declare function clearingBrokerToJSON(object: ClearingBroker): string;
 export declare enum TradeType {
     NOT_APPLICABLE_TRADE_TYPE = 0,
     MARKET = 1,

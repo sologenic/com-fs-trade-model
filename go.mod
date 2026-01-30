@@ -1,14 +1,14 @@
 module github.com/sologenic/com-fs-trade-model
 
-go 1.24.4
+go 1.25.5
 
 require (
-	github.com/sologenic/com-fs-asset-model v0.0.0-20251021201834-36ccc38df721
-	github.com/sologenic/com-fs-order-model v0.0.0-20251107224905-60459b8aa50d
-	github.com/sologenic/com-fs-utils-lib/go/decimal v0.0.0-20251107220602-a0757ed42489
-	github.com/sologenic/com-fs-utils-lib/go/grpc-client v0.0.0-20250628003024-44d0698ab496
-	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20251107220602-a0757ed42489
-	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20250628003024-44d0698ab496
+	github.com/sologenic/com-fs-asset-model v0.0.0-20260130210654-df8aa22e179d
+	github.com/sologenic/com-fs-order-model v0.0.0-20260130221331-d6be4028b44f
+	github.com/sologenic/com-fs-utils-internal-lib/go/grpc-client v0.0.0-20260130220814-92401870370c
+	github.com/sologenic/com-fs-utils-lib/models/decimal v0.0.0-20260130210252-132d1307ccf3
+	github.com/sologenic/com-fs-utils-lib/models/metadata v0.0.0-20260130170755-ffa545a27df1
+	github.com/sologenic/com-fs-utils-lib/models/order-properties v0.0.0-20260130210252-132d1307ccf3
 	google.golang.org/grpc v1.76.0
 	google.golang.org/protobuf v1.36.10
 )
@@ -28,9 +28,9 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rs/zerolog v1.34.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
-	github.com/sologenic/com-fs-utils-lib/go/logger v0.0.0-20240906214824-8118c42c5b35 // indirect
-	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20251107220602-a0757ed42489 // indirect
-	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20251107220602-a0757ed42489 // indirect
+	github.com/sologenic/com-fs-utils-internal-lib/go/logger v0.0.0-20260130220814-92401870370c // indirect
+	github.com/sologenic/com-fs-utils-lib/models/audit v0.0.0-20260130170755-ffa545a27df1 // indirect
+	github.com/sologenic/com-fs-utils-lib/models/commission v0.0.0-20260130210252-132d1307ccf3 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.63.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect

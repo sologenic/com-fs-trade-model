@@ -1,6 +1,6 @@
 import _m0 from "protobufjs/minimal";
 import { Denom } from "./sologenic/com-fs-asset-model/domain/denom/denom";
-import { Decimal } from "./sologenic/com-fs-utils-lib/go/decimal/decimal";
+import { Decimal } from "./sologenic/com-fs-utils-lib/models/decimal/decimal";
 import { MetaData } from "./sologenic/com-fs-utils-lib/models/metadata/metadata";
 export declare const protobufPackage = "trade";
 export interface TradePair {

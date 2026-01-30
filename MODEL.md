@@ -283,4 +283,4 @@ For additional information and support:
 - Check the imported utility libraries for details on related types:
   - `sologenic/com-fs-utils-lib/models/metadata/metadata.proto`
   - `sologenic/com-fs-asset-model/domain/denom/denom.proto`
-  - `sologenic/com-fs-utils-lib/go/decimal/decimal.proto`
+  - `sologenic/com-fs-utils-lib/models/decimal/decimal.proto`
