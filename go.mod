@@ -1,6 +1,6 @@
 module github.com/sologenic/com-fs-trade-model
 
-go 1.25.5
+go 1.26.2
 
 require (
 	github.com/sologenic/com-fs-asset-model v0.0.0-20260130210654-df8aa22e179d
