@@ -2,13 +2,13 @@
 
 The trade proto provides all the functionality required to interact with the trade store.
 
-The `Trade` model was initially designed to represent an executed order. However, with the introduction of the `ActivityType` enum, the definition of a `Trade` has expanded to become more of a `Transaction`.
+The `Trade` model represents a full or partial fill of an order. An order can have zero, one, or many trades.
 
-The `ActivityType` enum includes values such as `DEPOSIT`, `WITHDRAWAL`, `DIVIDEND`, etc., which are not trades in the traditional sense, but rather transactions that affect an account's balance. This was a necessary change to accommodate the needs of the system.
+The Trade model is universal and supports both:
+1) Broker Securities Smart Contract (buying and selling securities using Alpaca).
+2) TX marketplace.
 
-Therefore, it is important to understand that when we are working with the `Trade` model, we are actually working with a `Transaction` that can represent a variety of activities, not just a trade.
-
-Since wallets hold tokenized assets, we can treat inflow activities (e.g., deposits, dividends, received) as "buys" and outflow activities (e.g., withdrawals, sent) as "sells".
+A Trade is considered immutable after it has been saved in the database. The Datastore Key is built using the format: `OrganizationID_ExecutionID`.
 
 ## Building the required files
 
@@ -16,4 +16,3 @@ Once the proto file is updated, update the generated files with:
 
 ```sh
 ./bin/build.sh
-```

@@ -6,10 +6,6 @@ option go_package = "github.com/sologenic/com-fs-trade-model;trade";
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
-import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
-import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
-import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
-import "sologenic/com-fs-order-model/broker.proto";
 import "trade.proto";
 
 service TradeService {
@@ -21,28 +17,14 @@ service TradeService {
 
 // Ability to get all trade history views using the filter options
 message Filter {
-    metadata.Network Network = 1;
+    string OrganizationID = 10;
     optional google.protobuf.Timestamp From = 2;
     optional google.protobuf.Timestamp To = 3;
-    optional int64 Sequence = 4;
-    optional string OrderKey = 5; // Datastore key
-    optional string TXID = 6;
-    optional denom.Denom Denom1 = 7;
-    optional denom.Denom Denom2 = 8;
-    optional orderproperties.Side Side = 9;
-    string OrganizationID = 10;
     optional string UserID = 11; // User ID for the trade
-    optional order.TradeType TradeType = 12; // The type of the trade, e.g. limit, market, etc.
-    optional orderproperties.TimeInForce TimeInForce = 13; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
     optional int32 Limit = 14;
-    // Use for batch queries (with IN operator) instead of Denom1/Denom2
-    repeated string Denom1Symbols = 15; // List of Denom1 symbols to filter trades
-    repeated string Denom2Symbols = 16; // List of Denom2 symbols to filter trades
-    optional ActivityType ActivityType = 17; // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
 }
 
 message TradeKey {
-    string TXID = 1; // Transaction hash for the trade
+    string ExecutionID = 1;
     string OrganizationID = 2;
-    metadata.Network Network = 3;
 }
