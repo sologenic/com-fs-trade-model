@@ -10,8 +10,9 @@ import "trade.proto";
 
 service TradeService {
     rpc Get(TradeKey) returns (Trade) {}
+    // Upsert creates a trade once. Trades are immutable after create.
+    // An identical retry succeeds. A different payload for the same key fails.
     rpc Upsert(Trade) returns (google.protobuf.Empty) {}
-    rpc BatchUpsert(Trades) returns (google.protobuf.Empty) {}
     rpc List(Filter) returns (Trades) {}
 }
 
@@ -21,6 +22,7 @@ message Filter {
     optional google.protobuf.Timestamp From = 2;
     optional google.protobuf.Timestamp To = 3;
     optional string UserID = 11; // User ID for the trade
+    optional string OrderID = 12; // Internal Order ID
     optional int32 Limit = 14;
 }
 
