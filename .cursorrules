@@ -31,8 +31,7 @@ Generate comprehensive documentation for all Protocol Buffer (`.proto`) files in
 
 3. **Proto files to document:**
    - trade.proto - Trade model and definitions
-   - tradepair.proto - Tradepair model and definitions
-   
+
 4. **Documentation style:**
    - Use clear, professional language
    - Include field descriptions that explain business logic and usage

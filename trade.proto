@@ -5,96 +5,175 @@ package trade;
 option go_package = "github.com/sologenic/com-fs-trade-model;trade";
 
 import "google/protobuf/timestamp.proto";
-import "sologenic/com-fs-utils-lib/models/order-properties/order-properties.proto";
-import "sologenic/com-fs-utils-lib/models/metadata/metadata.proto";
-import "sologenic/com-fs-asset-model/domain/denom/denom.proto";
-import "sologenic/com-fs-utils-lib/models/decimal/decimal.proto";
-import "sologenic/com-fs-order-model/broker.proto";
+import "dependencies/google/type/decimal.proto";
+import "dependencies/buf/validate/validate.proto";
 
-// Key in store is TXID-Sequence-Metadata.Network
-message Trade { // Synonym for Transaction, which would have been a better name
-    string UserID = 1;
-    optional string OrderKey = 2; // Datastore key: OrderID-SmartContractAddr-Network
-    int64 Sequence = 3; // The sequence number of the order, assigned by the DEX (guaranteed unique value for the order)
-    decimal.Decimal Amount = 4; // Last fill quantity from the most recent fill/partial fill event
-    double Price = 5; // Last fill price from the most recent fill/partial fill event
-    denom.Denom Denom1 = 6; // Base currency (e.g. suwusdc_1-smartContractAddr)
-    denom.Denom Denom2 = 7; // Asset denom (e.g. suaapl_1-smartContractAddr)
-    orderproperties.Side Side = 8;  // The buy/sell (in the context of transactions, buys are inflow of funds and sells are outflow of funds)
-    google.protobuf.Timestamp BlockTime = 9; // The time the trade was executed in UTC
-    string OrganizationID = 10;
-    optional Receiver Receiver = 11; // The address of the receiver, used for sending of funds. Receiver can also be an email address, tx address or blockchain addres from another blockchain.
-    // Standard storage related fields
-    metadata.MetaData MetaData = 30;
-    optional string TXID = 31;
-    int64 BlockHeight = 32;
-    bool Enriched = 33; // If the trade has been enriched with precision data 
-    bool Processed = 34; // Check if trade is processed into the OHLC
+// Each trade represents a full or partial fill of an order.
+// An order can have zero, one, or many trades.
+// We store the exact time when the trade was executed, linked order ID, and fee information.
+//
+// The Trade model is universal and supports both:
+// 1) Broker Securities Smart Contract (buying and selling securities using Alpaca).
+// 2) TX marketplace (to be implemented).
+//
+// A Trade is immutable after it has been saved in the database.
+// Datastore Key format: OrganizationID + "_" + ExecutionID
+//
+// BaseAssetReference, QuoteAssetReference, FeeAssetReference
+// These fields specify the assets involved in the trade and can be one of the following:
+//
+// 1) Asset denom in the TX marketplace (includes subunit, version, issuer address).
+//    Example: "uamc_v1-testcore1vrp9245tzfe6quac0ld9qwqe6x747exwgfg0lqglg6vh23jg3vrsmpm3rr" (AMC stock)
+//
+// 2) Ticker symbol for Alpaca fiat.
+//    In Alpaca, trading is done only against USD. Since the user's USD is stored
+//    at the broker, we use "USD" as the QuoteAssetReference.
+//
+// Note: Validation requires the value to be either a strict TX asset denom format or exactly "USD".
+message Trade {
+    // Unique trade execution ID. Uniqueness is guaranteed only within the scope of an organization.
+    // This corresponds to the "execution_id" from Alpaca SSE Trade Events.
+    // Example: "bf286435-d55d-4fd1-be1e-c9a5b6722c28".
+    string ExecutionID = 1 [
+        (buf.validate.field).string = {
+            min_len: 32,
+            max_len: 128,
+            pattern: "^[a-zA-Z0-9-_]+$"
+        }
+    ];
 
-    // This status field enables unified indexing in Elasticsearch, allowing the backend to return a single combined dataset of both trades(executed orders) and orders for user trade history, 
-    // eliminating the need for separate Trade and Order queries on the frontend. Therefore, this field is to be used only when creating indexes in Elasticsearch.
-    optional Status Status = 35;
+    // Organization UUID.
+    string OrganizationID = 2 [
+        (buf.validate.field).string = {
+            uuid: true
+        }
+    ];
 
-    // USD representation of the trade values and trading fee (fixed base for easy data comparisson in reports etc), applicable for non-WUSDC based trades, RWAs, etc.
-    optional float USD = 40; // The USD value of the trade, calculated from the USD value of the currencies and the trading fee.
+    // User ID in our system (Firebase UID).
+    string UserID = 3 [
+        (buf.validate.field).string = {
+            min_len: 28,
+            max_len: 128,
+            pattern: "^[a-zA-Z0-9]+$"
+        }
+    ];
 
-    optional order.TradeType TradeType = 41; // The type of the trade, e.g. limit, market, etc.
-    optional double Commission = 42; // The commission paid to the brokerage
-    optional orderproperties.TimeInForce TimeInForce = 43; // The time in force for the trade, e.g. GTC, IOC, FOK, etc.
+    // Optional external user ID (e.g., the account ID at Alpaca).
+    string ExternalUserID = 4 [
+        (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+        (buf.validate.field).string = {
+            min_len: 28,
+            max_len: 128,
+            pattern: "^[a-zA-Z0-9-]+$"
+        }
+    ];
 
-    // Type of activity that the order represents, e.g. deposit, withdrawal, etc.
-    // Since wallets hold tokenized assets, we can treat inflow activities (e.g. deposits, dividends, received) as "buys" and outflow activities (e.g. withdrawals, sent) as "sell"
-    optional ActivityType ActivityType = 44;
+    // Internal Order ID.
+    // For organizations using the Broker Securities Smart Contract, this is a combination of
+    // the user ID and an order sequence.
+    // Example: "Sardr0i479afuVl0nRUkthHnUA33_37".
+    string OrderID = 5 [
+        (buf.validate.field).string = {
+            min_len: 30,
+            max_len: 128,
+            pattern: "^[a-zA-Z0-9-_]+$"
+        }
+    ];
 
-    // Trades get stored in alphabetical order of the denom pair. 
-    // Data is "uninverted" on retrieval and 
-    // this flag only indicates that the denoms as seen in the record are not in the original order
-    bool Inverted = 50;
+    // External Order ID.
+    // Used to keep track of orders in third-party services (e.g., the order ID at Alpaca).
+    string ExternalOrderID = 6 [
+        (buf.validate.field).ignore = IGNORE_IF_ZERO_VALUE,
+        (buf.validate.field).string = {
+            min_len: 10,
+            max_len: 128,
+            pattern: "^[a-zA-Z0-9-_]+$"
+        }
+    ];
 
-    // Order request details - what the user originally requested when placing the order
-    optional decimal.Decimal RequestedQty = 51;        // Original requested order quantity 
-    optional double LimitPrice = 52;          // Limit price set by the user
-    // Actual execution details - cumulative results across all fills
-    optional decimal.Decimal FilledQty = 53;           // Total accumulated quantity filled
-    optional double FilledAvgPrice = 54;               // Average execution price
+    // The direction of the trade (buy or sell).
+    TradeSide Side = 7 [
+        (buf.validate.field).enum = {
+            defined_only: true
+            not_in: [0]
+        }
+    ];
+
+    // The primary asset being traded.
+    // Must be either a valid TX denom or "USD".
+    string BaseAssetReference = 8 [
+        (buf.validate.field).string = {
+            min_len: 1,
+            pattern: "^(u[-A-Za-z0-9.]+_v[1-9][0-9]{0,2}-(?:test)?core1(?:[02-9ac-hj-np-z]{38}|[02-9ac-hj-np-z]{58})|USD)$"
+        }
+    ];
+
+    // The asset used to pay for the trade.
+    // Must be either a valid TX denom or "USD".
+    string QuoteAssetReference = 9 [
+        (buf.validate.field).string = {
+            min_len: 1,
+            pattern: "^(u[-A-Za-z0-9.]+_v[1-9][0-9]{0,2}-(?:test)?core1(?:[02-9ac-hj-np-z]{38}|[02-9ac-hj-np-z]{58})|USD)$"
+        }
+    ];
+
+    // Execution price per 1 unit of base, expressed in quote.
+    // Must be strictly greater than 0.
+    google.type.Decimal Price = 10 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "price_gt_zero",
+            message: "Price must be greater than 0",
+            expression: "double(this.value) > 0.0"
+        }
+    ];
+
+    // The amount of base that was traded.
+    // Must be strictly greater than 0.
+    google.type.Decimal Qty = 11 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "qty_gt_zero",
+            message: "Quantity must be greater than 0",
+            expression: "double(this.value) > 0.0"
+        }
+    ];
+
+    // The absolute fee amount paid for this trade execution.
+    // Must be greater than or equal to 0.
+    google.type.Decimal FeeQty = 12 [
+        (buf.validate.field).required = true,
+        (buf.validate.field).cel = {
+            id: "fee_qty_gte_zero",
+            message: "Fee quantity must be greater than or equal to 0",
+            expression: "double(this.value) >= 0.0"
+        }
+    ];
+
+    // The asset in which the fee was paid.
+    // Must be either a valid TX denom or "USD".
+    string FeeAssetReference = 13 [
+        (buf.validate.field).string = {
+            min_len: 1,
+            pattern: "^(u[-A-Za-z0-9.]+_v[1-9][0-9]{0,2}-(?:test)?core1(?:[02-9ac-hj-np-z]{38}|[02-9ac-hj-np-z]{58})|USD)$"
+        }
+    ];
+
+    // The exact time the trade was executed.
+    // This field is required.
+    google.protobuf.Timestamp ExecutedAt = 14 [
+        (buf.validate.field).required = true
+    ];
 }
 
-enum ActivityType {
-    NOT_USED_ACTIVITY_TYPE = 0;
-    ORDER = 1; // Order related: buy, sell, cancel
-    DEPOSIT = 2; // Deposit of funds to an account
-    WITHDRAWAL = 3; // Withdrawal of funds from an account
-    DIVIDEND = 4; // Dividend payment to an account
-    INTEREST = 5; // Interest payment to an account
-    RECEIVED = 6; // Received funds from another account
-    SENT = 7; // Sent funds from this account to another account
-    SUBSCRIPTION = 8; // Subscription to a service or product
-    USDC_USD_CONVERSION = 9; // Conversion of USDC to USD for deposit/withdrawals
+// TradeSide defines the direction of the trade.
+enum TradeSide {
+    TRADE_SIDE_UNSPECIFIED = 0;
+    TRADE_SIDE_BUY = 1;
+    TRADE_SIDE_SELL = 2;
 }
 
+// Pagination should be done using From and To timestamps.
 message Trades {
     repeated Trade Trades = 1;
-    optional int32 Offset = 2; // Offset for pagination
-}
-
-message Receiver {
-    string Address = 1; // The address of the receiver, used for sending of funds.
-    ReceiverType Type = 2; // The type of the receiver, e.g. email, tx address, blockchain address from another blockchain.
-}
-
-enum ReceiverType {
-    EMAIL = 0;
-    TX = 1;
-    ETHEREUM = 2;
-    SOLANA = 3;
-}
-
-enum Status {
-    NOT_USED_STATUS = 0;
-    PARTIALLY_FILLED = 1;
-    FILLED = 2;
-    CANCELLED = 3;
-    PLACED = 4;
-    EXPIRED = 5;
-    PENDING = 6;
 }
