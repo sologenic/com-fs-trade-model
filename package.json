@@ -4,7 +4,7 @@
   "description": "",
   "main": "build/trade.js",
   "scripts": {
-    "build-ts": "rm -rf build/ && npx tsc"
+    "build-ts": "rm -rf build/ && npx tsc -p tsconfig.json"
   },
   "dependencies": {
     "long": "^5.2.3",
@@ -13,6 +13,7 @@
   "devDependencies": {
     "typescript": "^4.9.4",
     "protoc-gen-ts": "^0.8.5",
-    "ts-proto": "^1.138.0"
+    "ts-proto": "^1.138.0",
+    "@types/node": "^20.12.12"
   }
 }
