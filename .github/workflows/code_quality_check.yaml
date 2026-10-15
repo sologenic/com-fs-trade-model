@@ -32,12 +32,6 @@ jobs:
         run: |
           git config --global url."https://${TOKEN}@github.com/".insteadOf "https://github.com/"
 
-      - name: Configure Git for private modules
-        env:
-          TOKEN: ${{ secrets.REPOSITORY_READ_ONLY_PAT }}
-        run: |
-          git config --global url."https://${TOKEN}@github.com/".insteadOf "https://github.com/"
-
       - name: Download dependencies
         env:
           GOPRIVATE: "github.com/sologenic/*"
